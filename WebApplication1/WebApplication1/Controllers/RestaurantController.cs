@@ -1,28 +1,42 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Net;
 using System.Web.Http;
 
 public class RestaurantController : ApiController
 {
-    private static List<Restaurant> restaurants = new List<Restaurant>();
     private FileService fileService = new FileService();
+    private Logger logger = new Logger();
+    private Validator validator = new Validator();
 
     [HttpPost]
     [Route("api/restaurants")]
     public IHttpActionResult AddRestaurant(Restaurant restaurant)
     {
-        var restaurants = fileService.LoadRestaurants();
+        try
+        {
+            validator.ValidateRestaurant(restaurant);
 
-        restaurants.Add(restaurant);
+            var restaurants = fileService.LoadRestaurants();
+            restaurants.Add(restaurant);
+            fileService.SaveRestaurants(restaurants);
 
-        fileService.SaveRestaurants(restaurants);
+            logger.Log("Added restaurant: " + restaurant.Name);
 
-        return Ok(restaurants);
+            return StatusCode(HttpStatusCode.Created);
+        }
+        catch (ArgumentException ex)
+        {
+            logger.Log("Error: " + ex.Message);
+            return BadRequest(ex.Message);
+        }
     }
 
     [HttpGet]
     [Route("api/restaurants")]
     public List<Restaurant> GetRestaurants()
     {
-        return restaurants;
+        logger.Log("Get all restaurants");
+        return fileService.LoadRestaurants();
     }
 }

@@ -1,0 +1,24 @@
+Error: Restaurant name is empty
+Login failed: admin
+Login failed: admin
+User registered: admin
+Login success: admin
+User registered: admin
+Login success: admin
+Error: Restaurant name is empty
+Error: Menu is null
+Login failed: admin123
+User registered: admin123
+Login success: admin123
+Error: Restaurant name is empty
+Login success: admin123
+User registered: admin1234
+Get all restaurants
+Error: Restaurant name is empty
+User registered: admin123476
+Login success: admin123
+User registered: admin1234769
+Login success: admin1234769
+Login failed: admin12347696
+Login success: admin1234769
+Get all restaurants
