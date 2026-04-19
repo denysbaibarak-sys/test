@@ -44,6 +44,7 @@ public class AuthService
         if (users.Any(u => u.Login == user.Login))
             throw new ArgumentException("User already exists");
 
+        user.Id = users.Any() ? users.Max(u => u.Id) + 1 : 1;
         users.Add(user);
         SaveUsers(); // зберігаємо відразу після реєстрації
     }
@@ -51,8 +52,39 @@ public class AuthService
     // Змінюємо тип повернення з bool на User
     public User Authenticate(string login, string password)
     {
-        // FirstOrDefault поверне об'єкт користувача, якщо логін і пароль збігаються.
-        // Якщо не збігаються — поверне null.
         return users.FirstOrDefault(u => u.Login == login && u.Password == password);
+    }
+    public bool UpdateUserProfile(User updatedUser)
+    {
+        // Шукаємо користувача. 
+        var existingUser = users.FirstOrDefault(u => u.Id == updatedUser.Id);
+
+        if (existingUser != null)
+        {
+            // 1. Перевіряємо, чи новий логін часом вже не зайнятий кимось ІНШИМ
+            if (existingUser.Login != updatedUser.Login && users.Any(u => u.Login == updatedUser.Login))
+            {
+                // Логін зайнятий
+                return false;
+            }
+
+            // 2. Оновлюємо дані
+            existingUser.Login = updatedUser.Login;
+
+            existingUser.Phone = updatedUser.Phone; 
+
+            // 3. Оновлюємо пароль ТІЛЬКИ якщо юзер ввів новий (не порожній)
+            if (!string.IsNullOrWhiteSpace(updatedUser.Password))
+            {
+                existingUser.Password = updatedUser.Password;
+            }
+
+            // 4. Зберігаємо оновлений список у users.json
+            SaveUsers();
+
+            return true;
+        }
+
+        return false;
     }
 }

@@ -101,7 +101,7 @@ StyleCopReport.xml
 *.pidb
 *.svclog
 *.scc
-
+*.txt
 # Тестовые файлы наглости
 _Чуцпа*
 

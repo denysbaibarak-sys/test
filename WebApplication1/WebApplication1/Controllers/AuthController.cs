@@ -43,4 +43,22 @@ public class UserController : ApiController
         logger.Log("Login failed: " + user.Login);
         return Unauthorized();
     }
+    [HttpPut]
+    [Route("api/users/update")]
+    public IHttpActionResult UpdateProfile([FromBody] User updatedUser)
+    {
+        if (updatedUser == null)
+            return BadRequest("Неправильні дані");
+
+        // ВИПРАВЛЕНО: Використовуємо правильну назву змінної (authService замість _authService)
+        bool isUpdated = authService.UpdateUserProfile(updatedUser);
+
+        if (isUpdated)
+        {
+            logger.Log("User updated: " + updatedUser.Login);
+            return Ok(new { message = "Профіль успішно оновлено!" });
+        }
+
+        return BadRequest("Не вдалося оновити профіль. Або користувача не знайдено, або такий логін вже існує.");
+    }
 }
