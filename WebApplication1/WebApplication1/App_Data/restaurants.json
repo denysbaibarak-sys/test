@@ -1,1 +1,67 @@
-[{"Address":"Kremenchuk","Menu":[{"Name":"Pizza132","Price":1488},{"Name":"test1","Price":26534532}],"Name":"vulkan"},{"Address":"Kremenchuk","Menu":[{"Name":"Pizza132","Price":1488},{"Name":"test1234","Price":26534532}],"Name":"vulkan"},{"Address":"Kyiv, Center","Menu":[{"Name":"Pepperoni Pizza","Price":150},{"Name":"Cheese Pizza","Price":130}],"Name":"Pizza House"},{"Address":"Kyiv, Center","Menu":[{"Name":"Pepperoni Pizza","Price":15000},{"Name":"Cheese Pizza","Price":13000}],"Name":"Pizza House"},{"Address":"Kyiv, Center","Menu":[{"Name":"Pepperoni Pizza1","Price":15000323},{"Name":"Cheese Pizza","Price":1300023}],"Name":"Pizza House12"},{"Address":"Kyiv, Center","Menu":[{"Name":"Pepperoni Pizza1","Price":222222222222},{"Name":"Cheese Pizza","Price":11111111111}],"Name":"Pizza House12"}]
+[
+  {
+    "Id": 1,
+    "Name": "Українська Садиба",
+    "Category": "Ресторани",
+    "Description": "Традиційні українські страви. Найсмачніші Ресторани домашньої кухні у місті.",
+    "Rating": 4.8,
+    "DeliveryTime": "30-45 хв",
+    "Menu": [
+      { "Id": 101, "Name": "Борщ український", "Description": "Традиційний борщ з пампушками та салом.", "Price": 145.00, "Category": "Перші страви" },
+      { "Id": 102, "Name": "Вареники з картоплею", "Description": "Домашні вареники зі шкварками та сметаною.", "Price": 120.00, "Category": "Основні страви" },
+      { "Id": 103, "Name": "Узвар", "Description": "Прохолодний напій із сухофруктів.", "Price": 45.00, "Category": "Напої" }
+    ]
+  },
+  {
+    "Id": 2,
+    "Name": "Burger & Grill",
+    "Category": "Фаст-фуд",
+    "Description": "Справжній американський Фаст-фуд. Соковиті котлети, крафтові булочки та хрустка фрі.",
+    "Rating": 4.5,
+    "DeliveryTime": "15-25 хв",
+    "Menu": [
+      { "Id": 201, "Name": "Сирний Суп", "Description": "Крем-суп з плавленим сиром та крутонами.", "Price": 95.00, "Category": "Перші страви" },
+      { "Id": 202, "Name": "Подвійний Чізбургер", "Description": "Дві котлети з яловичини, сир чеддер, бекон, соус BBQ.", "Price": 210.00, "Category": "Основні страви" },
+      { "Id": 203, "Name": "Кока-Кола", "Description": "Холодний газований напій 0.5л.", "Price": 40.00, "Category": "Напої" }
+    ]
+  },
+  {
+    "Id": 3,
+    "Name": "Суші Майстер",
+    "Category": "Інше",
+    "Description": "Свіжі роли, суші та паназійська кухня (Інше). Преміальна риба та швидка доставка.",
+    "Rating": 4.9,
+    "DeliveryTime": "40-60 хв",
+    "Menu": [
+      { "Id": 301, "Name": "Місо суп", "Description": "Традиційний японський суп з тофу та водоростями вакаме.", "Price": 110.00, "Category": "Перші страви" },
+      { "Id": 302, "Name": "Рол Філадельфія", "Description": "Лосось, крем-сир, огірок, рис, норі.", "Price": 295.00, "Category": "Основні страви" },
+      { "Id": 303, "Name": "Зелений чай Маття", "Description": "Японський порошковий зелений чай.", "Price": 75.00, "Category": "Напої" }
+    ]
+  },
+  {
+    "Id": 4,
+    "Name": "Pizza Italiana",
+    "Category": "Ресторани",
+    "Description": "Сімейні Ресторани. Справжня італійська піца на тонкому тісті з дров'яної печі.",
+    "Rating": 4.6,
+    "DeliveryTime": "25-35 хв",
+    "Menu": [
+      { "Id": 401, "Name": "Мінестроне", "Description": "Легкий італійський овочевий суп.", "Price": 130.00, "Category": "Перші страви" },
+      { "Id": 402, "Name": "Піца Маргарита", "Description": "Томатний соус, сир моцарела, базилік (30 см).", "Price": 190.00, "Category": "Основні страви" },
+      { "Id": 403, "Name": "Лимонад", "Description": "Освіжаючий домашній лимонад з м'ятою.", "Price": 60.00, "Category": "Напої" }
+    ]
+  },
+  {
+    "Id": 5,
+    "Name": "Кав'ярня 'Львівська'",
+    "Category": "Інше",
+    "Description": "Затишне місце (Інше). Найкраща кава свіжого обсмаження та крафтові десерти.",
+    "Rating": 4.9,
+    "DeliveryTime": "10-20 хв",
+    "Menu": [
+      { "Id": 501, "Name": "Сніданок вівсянка", "Description": "Солодка вівсянка з ягодами та горіхами.", "Price": 85.00, "Category": "Перші страви" },
+      { "Id": 502, "Name": "Чизкейк Нью-Йорк", "Description": "Класичний сирний десерт.", "Price": 115.00, "Category": "Основні страви" },
+      { "Id": 503, "Name": "Капучино", "Description": "Еспресо з гарячим молоком та густою пінкою.", "Price": 65.00, "Category": "Напої" }
+    ]
+  }
+]

@@ -48,8 +48,11 @@ public class AuthService
         SaveUsers(); // зберігаємо відразу після реєстрації
     }
 
-    public bool Login(string login, string password)
+    // Змінюємо тип повернення з bool на User
+    public User Authenticate(string login, string password)
     {
-        return users.Any(u => u.Login == login && u.Password == password);
+        // FirstOrDefault поверне об'єкт користувача, якщо логін і пароль збігаються.
+        // Якщо не збігаються — поверне null.
+        return users.FirstOrDefault(u => u.Login == login && u.Password == password);
     }
 }

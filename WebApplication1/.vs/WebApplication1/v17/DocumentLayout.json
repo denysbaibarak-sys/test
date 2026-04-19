@@ -1,37 +1,306 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\Samsung\\source\\repos\\WebApplication1\\",
-  "Documents": [],
+  "WorkspaceRootPath": "C:\\Users\\Mykhailo\\source\\repos\\test\\WebApplication1\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{DE05E1DD-C414-4F3A-9C27-64C97A59440B}|WebApplication1\\WebApplication1.csproj|C:\\Users\\Mykhailo\\source\\repos\\test\\WebApplication1\\webapplication1\\services\\authservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE05E1DD-C414-4F3A-9C27-64C97A59440B}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\services\\authservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DE05E1DD-C414-4F3A-9C27-64C97A59440B}|WebApplication1\\WebApplication1.csproj|c:\\users\\mykhailo\\source\\repos\\test\\webapplication1\\webapplication1\\models\\food.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE05E1DD-C414-4F3A-9C27-64C97A59440B}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\models\\food.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DE05E1DD-C414-4F3A-9C27-64C97A59440B}|WebApplication1\\WebApplication1.csproj|C:\\Users\\Mykhailo\\source\\repos\\test\\WebApplication1\\webapplication1\\models\\restaurant.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE05E1DD-C414-4F3A-9C27-64C97A59440B}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\models\\restaurant.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DE05E1DD-C414-4F3A-9C27-64C97A59440B}|WebApplication1\\WebApplication1.csproj|C:\\Users\\Mykhailo\\source\\repos\\test\\WebApplication1\\webapplication1\\models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE05E1DD-C414-4F3A-9C27-64C97A59440B}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DE05E1DD-C414-4F3A-9C27-64C97A59440B}|WebApplication1\\WebApplication1.csproj|C:\\Users\\Mykhailo\\source\\repos\\test\\WebApplication1\\webapplication1\\models\\order.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE05E1DD-C414-4F3A-9C27-64C97A59440B}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\models\\order.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DE05E1DD-C414-4F3A-9C27-64C97A59440B}|WebApplication1\\WebApplication1.csproj|C:\\Users\\Mykhailo\\source\\repos\\test\\WebApplication1\\webapplication1\\controllers\\ordercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE05E1DD-C414-4F3A-9C27-64C97A59440B}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\controllers\\ordercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DE05E1DD-C414-4F3A-9C27-64C97A59440B}|WebApplication1\\WebApplication1.csproj|C:\\Users\\Mykhailo\\source\\repos\\test\\WebApplication1\\webapplication1\\services\\orderservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE05E1DD-C414-4F3A-9C27-64C97A59440B}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\services\\orderservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DE05E1DD-C414-4F3A-9C27-64C97A59440B}|WebApplication1\\WebApplication1.csproj|C:\\Users\\Mykhailo\\source\\repos\\test\\WebApplication1\\webapplication1\\services\\fileservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE05E1DD-C414-4F3A-9C27-64C97A59440B}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\services\\fileservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DE05E1DD-C414-4F3A-9C27-64C97A59440B}|WebApplication1\\WebApplication1.csproj|C:\\Users\\Mykhailo\\source\\repos\\test\\WebApplication1\\webapplication1\\services\\logger.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE05E1DD-C414-4F3A-9C27-64C97A59440B}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\services\\logger.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DE05E1DD-C414-4F3A-9C27-64C97A59440B}|WebApplication1\\WebApplication1.csproj|C:\\Users\\Mykhailo\\source\\repos\\test\\WebApplication1\\webapplication1\\app_start\\filterconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE05E1DD-C414-4F3A-9C27-64C97A59440B}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\app_start\\filterconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DE05E1DD-C414-4F3A-9C27-64C97A59440B}|WebApplication1\\WebApplication1.csproj|C:\\Users\\Mykhailo\\source\\repos\\test\\WebApplication1\\webapplication1\\app_start\\routeconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE05E1DD-C414-4F3A-9C27-64C97A59440B}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\app_start\\routeconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DE05E1DD-C414-4F3A-9C27-64C97A59440B}|WebApplication1\\WebApplication1.csproj|C:\\Users\\Mykhailo\\source\\repos\\test\\WebApplication1\\webapplication1\\app_start\\webapiconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE05E1DD-C414-4F3A-9C27-64C97A59440B}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\app_start\\webapiconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DE05E1DD-C414-4F3A-9C27-64C97A59440B}|WebApplication1\\WebApplication1.csproj|C:\\Users\\Mykhailo\\source\\repos\\test\\WebApplication1\\webapplication1\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE05E1DD-C414-4F3A-9C27-64C97A59440B}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DE05E1DD-C414-4F3A-9C27-64C97A59440B}|WebApplication1\\WebApplication1.csproj|C:\\Users\\Mykhailo\\source\\repos\\test\\WebApplication1\\webapplication1\\controllers\\restaurantcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE05E1DD-C414-4F3A-9C27-64C97A59440B}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\controllers\\restaurantcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DE05E1DD-C414-4F3A-9C27-64C97A59440B}|WebApplication1\\WebApplication1.csproj|C:\\Users\\Mykhailo\\source\\repos\\test\\WebApplication1\\webapplication1\\controllers\\valuescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE05E1DD-C414-4F3A-9C27-64C97A59440B}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\controllers\\valuescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DE05E1DD-C414-4F3A-9C27-64C97A59440B}|WebApplication1\\WebApplication1.csproj|C:\\Users\\Mykhailo\\source\\repos\\test\\WebApplication1\\webapplication1\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE05E1DD-C414-4F3A-9C27-64C97A59440B}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Mykhailo\\source\\repos\\test\\WebApplication1\\WebApplication1\\App_Data\\restaurants.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:WebApplication1\\App_Data\\restaurants.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Mykhailo\\source\\repos\\test\\WebApplication1\\WebApplication1\\App_Data\\log.txt||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:WebApplication1\\App_Data\\log.txt||{8B382828-6202-11D1-8870-0000F87579D2}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
       "VerticalTabListWidth": 256,
       "DocumentGroups": [
         {
-          "DockedWidth": 235,
-          "SelectedChildIndex": -1,
+          "DockedWidth": 200,
+          "SelectedChildIndex": 9,
           "Children": [
             {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "FileService.cs",
+              "DocumentMoniker": "C:\\Users\\Mykhailo\\source\\repos\\test\\WebApplication1\\WebApplication1\\Services\\FileService.cs",
+              "RelativeDocumentMoniker": "WebApplication1\\Services\\FileService.cs",
+              "ToolTip": "C:\\Users\\Mykhailo\\source\\repos\\test\\WebApplication1\\WebApplication1\\Services\\FileService.cs",
+              "RelativeToolTip": "WebApplication1\\Services\\FileService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABkAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-18T10:42:57.578Z"
             },
             {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "Logger.cs",
+              "DocumentMoniker": "C:\\Users\\Mykhailo\\source\\repos\\test\\WebApplication1\\WebApplication1\\Services\\Logger.cs",
+              "RelativeDocumentMoniker": "WebApplication1\\Services\\Logger.cs",
+              "ToolTip": "C:\\Users\\Mykhailo\\source\\repos\\test\\WebApplication1\\WebApplication1\\Services\\Logger.cs",
+              "RelativeToolTip": "WebApplication1\\Services\\Logger.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-18T10:42:58.297Z"
             },
             {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{5b6781c0-e99d-11d0-9954-00a0c91bc8e5}"
-            }
-          ]
-        },
-        {
-          "DockedWidth": 235,
-          "SelectedChildIndex": -1,
-          "Children": [
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "FilterConfig.cs",
+              "DocumentMoniker": "C:\\Users\\Mykhailo\\source\\repos\\test\\WebApplication1\\WebApplication1\\App_Start\\FilterConfig.cs",
+              "RelativeDocumentMoniker": "WebApplication1\\App_Start\\FilterConfig.cs",
+              "ToolTip": "C:\\Users\\Mykhailo\\source\\repos\\test\\WebApplication1\\WebApplication1\\App_Start\\FilterConfig.cs",
+              "RelativeToolTip": "WebApplication1\\App_Start\\FilterConfig.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-18T10:42:52.37Z"
+            },
             {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{d78612c7-9962-4b83-95d9-268046dad23a}"
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "RouteConfig.cs",
+              "DocumentMoniker": "C:\\Users\\Mykhailo\\source\\repos\\test\\WebApplication1\\WebApplication1\\App_Start\\RouteConfig.cs",
+              "RelativeDocumentMoniker": "WebApplication1\\App_Start\\RouteConfig.cs",
+              "ToolTip": "C:\\Users\\Mykhailo\\source\\repos\\test\\WebApplication1\\WebApplication1\\App_Start\\RouteConfig.cs",
+              "RelativeToolTip": "WebApplication1\\App_Start\\RouteConfig.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-18T10:42:49.886Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "WebApiConfig.cs",
+              "DocumentMoniker": "C:\\Users\\Mykhailo\\source\\repos\\test\\WebApplication1\\WebApplication1\\App_Start\\WebApiConfig.cs",
+              "RelativeDocumentMoniker": "WebApplication1\\App_Start\\WebApiConfig.cs",
+              "ToolTip": "C:\\Users\\Mykhailo\\source\\repos\\test\\WebApplication1\\WebApplication1\\App_Start\\WebApiConfig.cs",
+              "RelativeToolTip": "WebApplication1\\App_Start\\WebApiConfig.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-18T10:42:49.064Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "RestaurantController.cs",
+              "DocumentMoniker": "C:\\Users\\Mykhailo\\source\\repos\\test\\WebApplication1\\WebApplication1\\Controllers\\RestaurantController.cs",
+              "RelativeDocumentMoniker": "WebApplication1\\Controllers\\RestaurantController.cs",
+              "ToolTip": "C:\\Users\\Mykhailo\\source\\repos\\test\\WebApplication1\\WebApplication1\\Controllers\\RestaurantController.cs",
+              "RelativeToolTip": "WebApplication1\\Controllers\\RestaurantController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACkAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-18T10:40:29.822Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "ValuesController.cs",
+              "DocumentMoniker": "C:\\Users\\Mykhailo\\source\\repos\\test\\WebApplication1\\WebApplication1\\Controllers\\ValuesController.cs",
+              "RelativeDocumentMoniker": "WebApplication1\\Controllers\\ValuesController.cs",
+              "ToolTip": "C:\\Users\\Mykhailo\\source\\repos\\test\\WebApplication1\\WebApplication1\\Controllers\\ValuesController.cs",
+              "RelativeToolTip": "WebApplication1\\Controllers\\ValuesController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-18T10:40:22.436Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "OrderController.cs",
+              "DocumentMoniker": "C:\\Users\\Mykhailo\\source\\repos\\test\\WebApplication1\\WebApplication1\\Controllers\\OrderController.cs",
+              "RelativeDocumentMoniker": "WebApplication1\\Controllers\\OrderController.cs",
+              "ToolTip": "C:\\Users\\Mykhailo\\source\\repos\\test\\WebApplication1\\WebApplication1\\Controllers\\OrderController.cs",
+              "RelativeToolTip": "WebApplication1\\Controllers\\OrderController.cs",
+              "ViewState": "AgIAAAQAAAAAAAAAAAAiwBMAAABZAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-17T19:47:47.69Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "OrderService.cs",
+              "DocumentMoniker": "C:\\Users\\Mykhailo\\source\\repos\\test\\WebApplication1\\WebApplication1\\Services\\OrderService.cs",
+              "RelativeDocumentMoniker": "WebApplication1\\Services\\OrderService.cs",
+              "ToolTip": "C:\\Users\\Mykhailo\\source\\repos\\test\\WebApplication1\\WebApplication1\\Services\\OrderService.cs",
+              "RelativeToolTip": "WebApplication1\\Services\\OrderService.cs",
+              "ViewState": "AgIAABkAAAAAAAAAAAAAwDYAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-17T19:47:33.96Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "AuthService.cs",
+              "DocumentMoniker": "C:\\Users\\Mykhailo\\source\\repos\\test\\WebApplication1\\WebApplication1\\Services\\AuthService.cs",
+              "RelativeDocumentMoniker": "WebApplication1\\Services\\AuthService.cs",
+              "ToolTip": "C:\\Users\\Mykhailo\\source\\repos\\test\\WebApplication1\\WebApplication1\\Services\\AuthService.cs",
+              "RelativeToolTip": "WebApplication1\\Services\\AuthService.cs",
+              "ViewState": "AgIAABgAAAAAAAAAAAAowDcAAABVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-17T13:16:10.965Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "AuthController.cs",
+              "DocumentMoniker": "C:\\Users\\Mykhailo\\source\\repos\\test\\WebApplication1\\WebApplication1\\Controllers\\AuthController.cs",
+              "RelativeDocumentMoniker": "WebApplication1\\Controllers\\AuthController.cs",
+              "ToolTip": "C:\\Users\\Mykhailo\\source\\repos\\test\\WebApplication1\\WebApplication1\\Controllers\\AuthController.cs",
+              "RelativeToolTip": "WebApplication1\\Controllers\\AuthController.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAqwCYAAABMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-17T13:11:12.637Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Order.cs",
+              "DocumentMoniker": "C:\\Users\\Mykhailo\\source\\repos\\test\\WebApplication1\\WebApplication1\\Models\\Order.cs",
+              "RelativeDocumentMoniker": "WebApplication1\\Models\\Order.cs",
+              "ToolTip": "C:\\Users\\Mykhailo\\source\\repos\\test\\WebApplication1\\WebApplication1\\Models\\Order.cs",
+              "RelativeToolTip": "WebApplication1\\Models\\Order.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABoAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-17T13:07:49.635Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "User.cs",
+              "DocumentMoniker": "C:\\Users\\Mykhailo\\source\\repos\\test\\WebApplication1\\WebApplication1\\Models\\User.cs",
+              "RelativeDocumentMoniker": "WebApplication1\\Models\\User.cs",
+              "ToolTip": "C:\\Users\\Mykhailo\\source\\repos\\test\\WebApplication1\\WebApplication1\\Models\\User.cs",
+              "RelativeToolTip": "WebApplication1\\Models\\User.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-17T12:30:29.481Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Restaurant.cs",
+              "DocumentMoniker": "C:\\Users\\Mykhailo\\source\\repos\\test\\WebApplication1\\WebApplication1\\Models\\Restaurant.cs",
+              "RelativeDocumentMoniker": "WebApplication1\\Models\\Restaurant.cs",
+              "ToolTip": "C:\\Users\\Mykhailo\\source\\repos\\test\\WebApplication1\\WebApplication1\\Models\\Restaurant.cs",
+              "RelativeToolTip": "WebApplication1\\Models\\Restaurant.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-17T12:30:24.176Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Food.cs",
+              "DocumentMoniker": "C:\\Users\\Mykhailo\\source\\repos\\test\\WebApplication1\\WebApplication1\\Models\\Food.cs",
+              "RelativeDocumentMoniker": "WebApplication1\\Models\\Food.cs",
+              "ToolTip": "C:\\Users\\Mykhailo\\source\\repos\\test\\WebApplication1\\WebApplication1\\Models\\Food.cs",
+              "RelativeToolTip": "WebApplication1\\Models\\Food.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAoAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-17T12:29:13.363Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "HomeController.cs",
+              "DocumentMoniker": "C:\\Users\\Mykhailo\\source\\repos\\test\\WebApplication1\\WebApplication1\\Controllers\\HomeController.cs",
+              "RelativeDocumentMoniker": "WebApplication1\\Controllers\\HomeController.cs",
+              "ToolTip": "C:\\Users\\Mykhailo\\source\\repos\\test\\WebApplication1\\WebApplication1\\Controllers\\HomeController.cs",
+              "RelativeToolTip": "WebApplication1\\Controllers\\HomeController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-12T21:05:20.966Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "restaurants.json",
+              "DocumentMoniker": "C:\\Users\\Mykhailo\\source\\repos\\test\\WebApplication1\\WebApplication1\\App_Data\\restaurants.json",
+              "RelativeDocumentMoniker": "WebApplication1\\App_Data\\restaurants.json",
+              "ToolTip": "C:\\Users\\Mykhailo\\source\\repos\\test\\WebApplication1\\WebApplication1\\App_Data\\restaurants.json",
+              "RelativeToolTip": "WebApplication1\\App_Data\\restaurants.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-04-12T21:05:16.661Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "log.txt",
+              "DocumentMoniker": "C:\\Users\\Mykhailo\\source\\repos\\test\\WebApplication1\\WebApplication1\\App_Data\\log.txt",
+              "RelativeDocumentMoniker": "WebApplication1\\App_Data\\log.txt",
+              "ToolTip": "C:\\Users\\Mykhailo\\source\\repos\\test\\WebApplication1\\WebApplication1\\App_Data\\log.txt",
+              "RelativeToolTip": "WebApplication1\\App_Data\\log.txt",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003109|",
+              "WhenOpened": "2026-04-12T21:05:15.122Z"
             }
           ]
         }

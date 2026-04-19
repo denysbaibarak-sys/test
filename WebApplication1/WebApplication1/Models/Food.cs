@@ -7,5 +7,17 @@ public class Food
     public string Name { get; set; }
 
     [DataMember]
-    public double Price { get; set; }
+    public string Description { get; set; }
+
+    [DataMember]
+    public decimal Price { get; set; }
+
+    [DataMember]
+    public string Category { get; set; }
+
+    [DataMember]
+    public string ImagePath { get; set; }
+
+    [DataMember]
+    public int Quantity { get; set; }
 }

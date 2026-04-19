@@ -27,10 +27,17 @@ public class UserController : ApiController
     [Route("api/users/login")]
     public IHttpActionResult Login(User user)
     {
-        if (authService.Login(user.Login, user.Password))
+        // Припустимо, що AuthService після успішного входу повертає повного юзера (з базою, email тощо), 
+        // або null, якщо пароль неправильний.
+        var loggedInUser = authService.Authenticate(user.Login, user.Password);
+
+        if (loggedInUser != null)
         {
             logger.Log("Login success: " + user.Login);
-            return Ok();
+
+            // Повертаємо не просто Ok(), а Ok(дані_користувача)!
+            // Клієнт отримає JSON з усіма полями юзера і збереже їх у себе.
+            return Ok(loggedInUser);
         }
 
         logger.Log("Login failed: " + user.Login);
