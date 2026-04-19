@@ -400,6 +400,9 @@ FodyWeavers.xsd
 *.sln.iml
 
 ### Патч для Visual Studio ###
+.vs/
+bin/
+obj/
 # Дополнительные файлы, созданные Visual Studio
 
 # Конец https://www.toptal.com/developers/gitignore/api/visualstudio
