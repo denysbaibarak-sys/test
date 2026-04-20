@@ -8,35 +8,56 @@ public class OrderController : ApiController
 
     [HttpPost]
     [Route("api/orders/create")]
-    public IHttpActionResult CreateOrder(Order order)
+public IHttpActionResult CreateOrder(Order order)
+{
+    try
     {
-        try
-        {
-            // Передаємо замовлення з кошика в сервіс
-            orderService.AddOrder(order);
+        
+        var token = Request.Headers.Authorization?.Parameter;
 
-            logger.Log("Order created successfully: " + order.OrderId);
+        var user = new AuthService().GetUserByToken(token);
 
-            // Повертаємо 200 OK і саме замовлення (щоб клієнт побачив свій ID та Статус)
-            return Ok(order);
-        }
-        catch (ArgumentException ex)
-        {
-            logger.Log("Order creation failed (Bad Request): " + ex.Message);
-            return BadRequest(ex.Message); // Повертаємо помилку 400, якщо кошик порожній
-        }
-        catch (Exception ex)
-        {
-            logger.Log("Server error during order creation: " + ex.Message);
-            return InternalServerError(ex); // Повертаємо помилку 500, якщо зламався файл
-        }
+        if (user == null)
+            return Unauthorized();
+
+        
+        order.UserId = user.Id;
+
+        
+        orderService.AddOrder(order);
+
+        logger.Log("Order created successfully: " + order.OrderId);
+
+        return Ok(order);
     }
+    catch (ArgumentException ex)
+    {
+        logger.Log("Order creation failed (Bad Request): " + ex.Message);
+        return BadRequest(ex.Message);
+    }
+    catch (Exception ex)
+    {
+        logger.Log("Server error during order creation: " + ex.Message);
+        return InternalServerError(ex);
+    }
+}
 
     [HttpGet]
     [Route("api/orders")]
     public IHttpActionResult GetOrders()
     {
-        var allOrders = orderService.GetAllOrders();
-        return Ok(allOrders);
+        try
+        {
+            var allOrders = orderService.GetAllOrders();
+
+            logger.Log("GetOrders called. Total orders: " + allOrders.Count);
+
+            return Ok(allOrders);
+        }
+        catch (Exception ex)
+        {
+            logger.Log("Error in GetOrders: " + ex.Message);
+            return InternalServerError(ex);
+        }
     }
 }

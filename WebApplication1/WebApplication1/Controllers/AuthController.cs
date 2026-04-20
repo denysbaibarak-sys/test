@@ -29,15 +29,13 @@ public class UserController : ApiController
     {
         // Припустимо, що AuthService після успішного входу повертає повного юзера (з базою, email тощо), 
         // або null, якщо пароль неправильний.
-        var loggedInUser = authService.Authenticate(user.Login, user.Password);
+        var token = authService.Authenticate(user.Login, user.Password);
 
-        if (loggedInUser != null)
+        if (token != null)
         {
             logger.Log("Login success: " + user.Login);
 
-            // Повертаємо не просто Ok(), а Ok(дані_користувача)!
-            // Клієнт отримає JSON з усіма полями юзера і збереже їх у себе.
-            return Ok(loggedInUser);
+            return Ok(new { token = token });
         }
 
         logger.Log("Login failed: " + user.Login);
@@ -47,18 +45,20 @@ public class UserController : ApiController
     [Route("api/users/update")]
     public IHttpActionResult UpdateProfile([FromBody] User updatedUser)
     {
-        if (updatedUser == null)
-            return BadRequest("Неправильні дані");
+        var token = Request.Headers.Authorization?.Parameter;
 
-        // ВИПРАВЛЕНО: Використовуємо правильну назву змінної (authService замість _authService)
+        var user = authService.GetUserByToken(token);
+
+        if (user == null)
+            return Unauthorized();
+
+        updatedUser.Id = user.Id;
+
         bool isUpdated = authService.UpdateUserProfile(updatedUser);
 
         if (isUpdated)
-        {
-            logger.Log("User updated: " + updatedUser.Login);
-            return Ok(new { message = "Профіль успішно оновлено!" });
-        }
+            return Ok();
 
-        return BadRequest("Не вдалося оновити профіль. Або користувача не знайдено, або такий логін вже існує.");
+        return BadRequest("Update failed");
     }
 }

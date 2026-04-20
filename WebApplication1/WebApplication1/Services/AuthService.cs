@@ -9,7 +9,7 @@ public class AuthService
 {
     private string path = HostingEnvironment.MapPath("~/App_Data/users.json");
     private List<User> users;
-
+    private static Dictionary<string, User> tokens = new Dictionary<string, User>();
     public AuthService()
     {
         users = LoadUsers();
@@ -27,6 +27,10 @@ public class AuthService
         }
     }
 
+    private string GenerateToken()
+    {
+        return Guid.NewGuid().ToString("N"); 
+    }
     private void SaveUsers()
     {
         var serializer = new DataContractJsonSerializer(typeof(List<User>));
@@ -50,9 +54,24 @@ public class AuthService
     }
 
     // Змінюємо тип повернення з bool на User
-    public User Authenticate(string login, string password)
+    public string Authenticate(string login, string password)
     {
-        return users.FirstOrDefault(u => u.Login == login && u.Password == password);
+        var user = users.FirstOrDefault(u => u.Login == login && u.Password == password);
+
+        if (user == null)
+            return null;
+
+        string token = GenerateToken();
+        tokens[token] = user;
+
+        return token;
+    }
+    public User GetUserByToken(string token)
+    {
+        if (tokens.ContainsKey(token))
+            return tokens[token];
+
+        return null;
     }
     public bool UpdateUserProfile(User updatedUser)
     {

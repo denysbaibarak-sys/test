@@ -112,3 +112,20 @@ Login success: Lari
 Get all restaurants
 User registered: Leb
 Login success: Leb
+User registered: denys
+Login success: denys
+Order creation failed (Bad Request): Значение не может быть неопределенным.
+Имя параметра: key
+Order creation failed (Bad Request): Значение не может быть неопределенным.
+Имя параметра: key
+Order creation failed (Bad Request): Значение не может быть неопределенным.
+Имя параметра: key
+Error: Restaurant name is empty
+Added restaurant: McDonald's
+Order creation failed (Bad Request): Значение не может быть неопределенным.
+Имя параметра: key
+Order creation failed (Bad Request): Значение не может быть неопределенным.
+Имя параметра: key
+Order creation failed (Bad Request): Значение не может быть неопределенным.
+Имя параметра: key
+Order created successfully: ORD-001
