@@ -129,3 +129,19 @@ Order creation failed (Bad Request): Значение не может быть �
 Order creation failed (Bad Request): Значение не может быть неопределенным.
 Имя параметра: key
 Order created successfully: ORD-001
+User registered: Adolf
+Login success: Adolf
+GetOrders called. Total orders: 0
+Get all restaurants
+GetOrders called. Total orders: 0
+GetOrders called. Total orders: 0
+GetOrders called. Total orders: 0
+Login success: Adolf
+Get all restaurants
+GetOrders called. Total orders: 0
+Get all restaurants
+Login success: Adolf
+Login success: Adolf
+Get all restaurants
+Order created successfully: ORD-221570
+GetOrders called. Total orders: 1

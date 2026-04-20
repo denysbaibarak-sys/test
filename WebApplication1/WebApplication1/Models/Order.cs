@@ -9,6 +9,8 @@ public class Order
 
     [DataMember]
     public int UserId { get; set; }
+    [DataMember]
+    public int RestaurantId { get; set; }
 
     [DataMember]
     public string RestaurantName { get; set; }

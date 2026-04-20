@@ -27,20 +27,21 @@ public class UserController : ApiController
     [Route("api/users/login")]
     public IHttpActionResult Login(User user)
     {
-        // Припустимо, що AuthService після успішного входу повертає повного юзера (з базою, email тощо), 
-        // або null, якщо пароль неправильний.
-        var token = authService.Authenticate(user.Login, user.Password);
 
-        if (token != null)
+        var loggedInUser = authService.Authenticate(user.Login, user.Password);
+
+        if (loggedInUser != null)
         {
             logger.Log("Login success: " + user.Login);
 
-            return Ok(new { token = token });
+            // Віддаємо клієнту ВЕСЬ об'єкт юзера, як того очікує Avalonia!
+            return Ok(loggedInUser);
         }
 
         logger.Log("Login failed: " + user.Login);
         return Unauthorized();
     }
+
     [HttpPut]
     [Route("api/users/update")]
     public IHttpActionResult UpdateProfile([FromBody] User updatedUser)
@@ -52,7 +53,7 @@ public class UserController : ApiController
         if (user == null)
             return Unauthorized();
 
-        updatedUser.Id = user.Id;
+        updatedUser.Token = token;
 
         bool isUpdated = authService.UpdateUserProfile(updatedUser);
 

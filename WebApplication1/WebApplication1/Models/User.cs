@@ -4,6 +4,9 @@
 public class User
 {
     [DataMember]
+    public string Token { get; set; }
+
+    [DataMember]
     public int Id { get; set; }
     [DataMember]
     public string Login { get; set; }

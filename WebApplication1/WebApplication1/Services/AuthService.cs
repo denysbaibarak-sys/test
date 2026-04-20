@@ -3,13 +3,16 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Json;
+using System.Text.RegularExpressions;
 using System.Web.Hosting;
 
 public class AuthService
 {
     private string path = HostingEnvironment.MapPath("~/App_Data/users.json");
     private List<User> users;
-    private static Dictionary<string, User> tokens = new Dictionary<string, User>();
+
+    // Словник tokens більше не потрібен, зберігаємо токени прямо в users.json!
+
     public AuthService()
     {
         users = LoadUsers();
@@ -29,8 +32,9 @@ public class AuthService
 
     private string GenerateToken()
     {
-        return Guid.NewGuid().ToString("N"); 
+        return Guid.NewGuid().ToString("N");
     }
+
     private void SaveUsers()
     {
         var serializer = new DataContractJsonSerializer(typeof(List<User>));
@@ -48,57 +52,64 @@ public class AuthService
         if (users.Any(u => u.Login == user.Login))
             throw new ArgumentException("User already exists");
 
+        // Ідеально! Тепер Id буде унікальним.
         user.Id = users.Any() ? users.Max(u => u.Id) + 1 : 1;
         users.Add(user);
-        SaveUsers(); // зберігаємо відразу після реєстрації
+        SaveUsers();
     }
 
-    // Змінюємо тип повернення з bool на User
-    public string Authenticate(string login, string password)
+    // Повертаємо ПОВНОГО ЮЗЕРА (разом з токеном)
+    public User Authenticate(string login, string password)
     {
         var user = users.FirstOrDefault(u => u.Login == login && u.Password == password);
 
-        if (user == null)
-            return null;
+        if (user != null)
+        {
+            // Генеруємо токен і записуємо його прямо в об'єкт юзера
+            user.Token = GenerateToken();
 
-        string token = GenerateToken();
-        tokens[token] = user;
+            SaveUsers();
+        }
 
-        return token;
+        return user; // Віддаємо клієнту об'єкт
     }
+
     public User GetUserByToken(string token)
     {
-        if (tokens.ContainsKey(token))
-            return tokens[token];
+        if (string.IsNullOrWhiteSpace(token))
+            return null;
 
-        return null;
+        // Шукаємо юзера прямо в нашій базі за його токеном
+        return users.FirstOrDefault(u => u.Token == token);
     }
+
     public bool UpdateUserProfile(User updatedUser)
     {
-        // Шукаємо користувача. 
-        var existingUser = users.FirstOrDefault(u => u.Id == updatedUser.Id);
+        if (!string.IsNullOrEmpty(updatedUser.Phone))
+        {
+            // Перевірка формату номера
+            var phoneRegex = new Regex(@"^\+?[0-9]{10,12}$");
+            if (!phoneRegex.IsMatch(updatedUser.Phone))
+                return false;
+        }
+        var existingUser = users.FirstOrDefault(u => u.Token == updatedUser.Token);
 
         if (existingUser != null)
         {
-            // 1. Перевіряємо, чи новий логін часом вже не зайнятий кимось ІНШИМ
             if (existingUser.Login != updatedUser.Login && users.Any(u => u.Login == updatedUser.Login))
             {
-                // Логін зайнятий
                 return false;
             }
 
-            // 2. Оновлюємо дані
             existingUser.Login = updatedUser.Login;
+            existingUser.Phone = updatedUser.Phone;
 
-            existingUser.Phone = updatedUser.Phone; 
-
-            // 3. Оновлюємо пароль ТІЛЬКИ якщо юзер ввів новий (не порожній)
+            // 3. Оновлюємо пароль ТІЛЬКИ якщо юзер ввів новий
             if (!string.IsNullOrWhiteSpace(updatedUser.Password))
             {
                 existingUser.Password = updatedUser.Password;
             }
 
-            // 4. Зберігаємо оновлений список у users.json
             SaveUsers();
 
             return true;
