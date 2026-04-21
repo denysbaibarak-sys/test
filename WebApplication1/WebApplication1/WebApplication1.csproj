@@ -170,6 +170,7 @@
     <Compile Include="Services\FileService.cs" />
     <Compile Include="Services\Logger.cs" />
     <Compile Include="Services\OrderService.cs" />
+    <Compile Include="Services\TaskQueueManager.cs" />
     <Compile Include="Services\Validator.cs" />
   </ItemGroup>
   <ItemGroup>
