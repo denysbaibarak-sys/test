@@ -15,20 +15,27 @@ public class RestaurantController : ApiController
     {
         try
         {
+            logger.Log($"[ОТРИМАНО] Запит на додавання ресторану: {restaurant?.Name}");
+
             validator.ValidateRestaurant(restaurant);
 
             var restaurants = fileService.LoadRestaurants();
             restaurants.Add(restaurant);
             fileService.SaveRestaurants(restaurants);
 
-            logger.Log("Added restaurant: " + restaurant.Name);
+            logger.Log($"[ВІДПРАВЛЕНО] Ресторан '{restaurant.Name}' успішно додано до бази.");
 
             return StatusCode(HttpStatusCode.Created);
         }
         catch (ArgumentException ex)
         {
-            logger.Log("Error: " + ex.Message);
+            logger.Log($"[ПОМИЛКА] Валідація ресторану {restaurant?.Name} не пройдена: {ex.Message}");
             return BadRequest(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            logger.Log($"[ПОМИЛКА СЕРВЕРА] Під час додавання ресторану: {ex.Message}");
+            return InternalServerError(ex);
         }
     }
 
@@ -36,7 +43,12 @@ public class RestaurantController : ApiController
     [Route("api/restaurants")]
     public List<Restaurant> GetRestaurants()
     {
-        logger.Log("Get all restaurants");
-        return fileService.LoadRestaurants();
+        logger.Log("[ОТРИМАНО] Запит на отримання списку всіх ресторанів.");
+
+        var restaurants = fileService.LoadRestaurants();
+
+        logger.Log($"[ВІДПРАВЛЕНО] Віддано клієнту ресторанів: {restaurants.Count}");
+
+        return restaurants;
     }
 }
