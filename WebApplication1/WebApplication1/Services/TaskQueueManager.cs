@@ -5,13 +5,11 @@ using System.Threading.Tasks;
 
 public static class TaskQueueManager
 {
-    // Потокобезпечна черга повідомлень/завдань (Message Queue)
     private static readonly ConcurrentQueue<Action> _queue = new ConcurrentQueue<Action>();
 
     private static bool _isRunning = false;
-    private static Logger _logger = new Logger(); // Наш логер
+    private static Logger _logger = new Logger();
 
-    // Запуск Воркера (Workers - threads or tasks)
     public static void StartWorker()
     {
         if (_isRunning) return;
@@ -29,7 +27,6 @@ public static class TaskQueueManager
                 {
                     try
                     {
-                        // Виконуємо завдання (наприклад, збереження замовлення в БД)
                         workItem.Invoke();
                     }
                     catch (Exception ex)
@@ -39,7 +36,7 @@ public static class TaskQueueManager
                 }
                 else
                 {
-                    // Якщо черга порожня, воркер "відпочиває" 100 мілісекунд, щоб не вантажити процесор
+                    // Якщо черга порожня, воркер чекає 100 мілісекунд
                     Thread.Sleep(100);
                 }
             }

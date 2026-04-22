@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Web.Http;
 
 public class OrderController : ApiController
@@ -80,6 +81,41 @@ public IHttpActionResult CreateOrder(Order order)
         catch (Exception ex)
         {
             logger.Log("Error in GetOrders: " + ex.Message);
+            return InternalServerError(ex);
+        }
+    }
+    [HttpGet]
+    [Route("api/orders/poll")]
+    public IHttpActionResult PollOrders(string lastUpdate)
+    {
+        try
+        {
+            DateTime parsedDate;
+
+            // Якщо клієнт нічого не передав → повертаємо всі
+            if (string.IsNullOrEmpty(lastUpdate) || !DateTime.TryParse(lastUpdate, out parsedDate))
+            {
+                var allOrders = orderService.GetAllOrders();
+                logger.Log("[POLLING] Немає дати, повертаємо всі замовлення.");
+                return Ok(allOrders);
+            }
+
+            // Беремо лише нові (логіка напарника)
+            var newOrders = orderService.GetOrdersAfter(parsedDate);
+
+            // Якщо нових немає - повертаємо 204 NoContent (і не спамимо в лог)
+            if (newOrders == null || !newOrders.Any())
+            {
+                return StatusCode(System.Net.HttpStatusCode.NoContent);
+            }
+
+            // Якщо є оновлення - пишемо в лог і віддаємо клієнту
+            logger.Log($"[POLLING] Знайдено {newOrders.Count} оновлених замовлень.");
+            return Ok(newOrders);
+        }
+        catch (Exception ex)
+        {
+            logger.Log("[ПОМИЛКА POLLING]: " + ex.Message);
             return InternalServerError(ex);
         }
     }
