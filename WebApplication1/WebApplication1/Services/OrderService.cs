@@ -25,7 +25,18 @@ public class OrderService
         var serializer = new DataContractJsonSerializer(typeof(List<Order>));
         using (FileStream fs = new FileStream(path, FileMode.Open))
         {
-            return (List<Order>)serializer.ReadObject(fs);
+            var loadedOrders = (List<Order>)serializer.ReadObject(fs);
+
+            
+            foreach (var order in loadedOrders)
+            {
+                if (order.UpdatedAt == default(DateTime))
+                {
+                    order.UpdatedAt = DateTime.Now;
+                }
+            }
+
+            return loadedOrders;
         }
     }
 
@@ -72,11 +83,20 @@ public class OrderService
 
         newOrder.Status = "В обробці";
         newOrder.OrderDate = DateTime.Now.ToString("dd.MM.yyyy HH:mm");
+        newOrder.UpdatedAt = DateTime.Now;
 
         // Зберігаємо
+        newOrder.UpdatedAt = DateTime.Now;
         orders.Add(newOrder);
         SaveOrders();
     }
+    public List<Order> GetOrdersAfter(DateTime lastUpdate)
+    {
+        return orders
+            .Where(o => o.UpdatedAt > lastUpdate)
+            .ToList();
+    }
+
     public List<Order> GetAllOrders()
     {
         return orders;

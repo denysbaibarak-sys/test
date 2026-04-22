@@ -145,3 +145,32 @@ Login success: Adolf
 Get all restaurants
 Order created successfully: ORD-221570
 GetOrders called. Total orders: 1
+Login failed: denys
+User registered: denys
+Login success: denys
+Order creation failed (Bad Request): Ресторан з ID 0 не знайдено.
+Order creation failed (Bad Request): Ресторан з ID 0 не знайдено.
+Server error during order creation: Значения DateTime, которые больше DateTime.MaxValue или меньше DateTime.MinValue, при преобразовании во время в формате UTC не могут быть сериализованы в JSON.
+Server error during order creation: Значения DateTime, которые больше DateTime.MaxValue или меньше DateTime.MinValue, при преобразовании во время в формате UTC не могут быть сериализованы в JSON.
+Server error during order creation: Значения DateTime, которые больше DateTime.MaxValue или меньше DateTime.MinValue, при преобразовании во время в формате UTC не могут быть сериализованы в JSON.
+Server error during order creation: Значения DateTime, которые больше DateTime.MaxValue или меньше DateTime.MinValue, при преобразовании во время в формате UTC не могут быть сериализованы в JSON.
+Login success: denys
+Login success: denys
+Order creation failed (Bad Request): Страви 'Big Mac' немає в меню ресторану 'Українська Садиба'.
+Order created successfully: ORD-5FB976
+Polling updates: 1
+Polling updates: 1
+Polling updates: 1
+Login success: denys
+Order created successfully: ORD-A02BED
+Polling updates: 1
+Polling updates: 1
+Polling updates: 1
+Polling updates: 0
+Polling updates: 0
+Order created successfully: ORD-07A46C
+Polling updates: 1
+Polling updates: 0
+Polling updates: 1
+Polling updates: 0
+Polling updates: 1

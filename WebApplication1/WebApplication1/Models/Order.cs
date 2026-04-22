@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 [DataContract]
@@ -17,6 +18,9 @@ public class Order
 
     [DataMember]
     public string OrderDate { get; set; }
+
+    [DataMember]
+    public DateTime UpdatedAt { get; set; }
 
     [DataMember]
     public List<Food> OrderedItems { get; set; }

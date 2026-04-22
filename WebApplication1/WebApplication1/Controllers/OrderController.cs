@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Web.Http;
 
 public class OrderController : ApiController
@@ -60,4 +61,64 @@ public IHttpActionResult CreateOrder(Order order)
             return InternalServerError(ex);
         }
     }
+    [HttpGet]
+    [Route("api/orders/poll")]
+    public IHttpActionResult PollOrders(string lastUpdate)
+    {
+        try
+        {
+            DateTime parsedDate;
+
+            // якщо клієнт нічого не передав → повертаємо всі
+            if (string.IsNullOrEmpty(lastUpdate) || !DateTime.TryParse(lastUpdate, out parsedDate))
+            {
+                var allOrders = orderService.GetAllOrders();
+                logger.Log("Polling: no lastUpdate, returning all orders");
+                return Ok(allOrders);
+            }
+
+            var newOrders = orderService.GetOrdersAfter(parsedDate);
+
+            if (newOrders == null || !newOrders.Any())
+            {
+                logger.Log("Polling: no new orders");
+                return StatusCode(System.Net.HttpStatusCode.NoContent);
+            }
+
+            logger.Log($"Polling: returned {newOrders.Count} new orders");
+
+            return Ok(newOrders);
+        }
+        catch (Exception ex)
+        {
+            logger.Log("Polling error: " + ex.Message);
+            return InternalServerError(ex);
+        }
+    }
+    [HttpGet]
+    [Route("api/orders/updates")]
+    public IHttpActionResult GetUpdates(DateTime? lastUpdate = null)
+    {
+        try
+        {
+            var orders = orderService.GetAllOrders();
+
+            if (lastUpdate.HasValue)
+            {
+                orders = orders
+                    .Where(o => o.UpdatedAt > lastUpdate.Value)
+                    .ToList();
+            }
+
+            logger.Log("Polling updates: " + orders.Count);
+
+            return Ok(orders);
+        }
+        catch (Exception ex)
+        {
+            logger.Log("Polling error: " + ex.Message);
+            return InternalServerError(ex);
+        }
+    }
+
 }
