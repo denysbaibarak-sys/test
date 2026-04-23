@@ -1,5 +1,7 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Collections.Generic;
 using ClientAppe.Models;
@@ -30,6 +32,8 @@ namespace ClientAppe.ViewModels
             set { _isActiveTab = value; OnPropertyChanged(); }
         }
 
+        private bool _isPolling = true;
+
         public string ActiveOrdersText => $"Мої замовлення ({_allOrders.Count(o => o.Status != "Доставлено")})";
         public string HistoryOrdersText => $"Історія ({_allOrders.Count(o => o.Status == "Доставлено")})";
 
@@ -47,12 +51,41 @@ namespace ClientAppe.ViewModels
             });
 
             LoadOrders();
+            StartPollingAsync();
         }
 
         private async void LoadOrders()
         {
             _allOrders = await _apiService.GetOrdersAsync();
             FilterOrders(); // Відразу фільтруємо при завантаженні
+        }
+
+        private async void StartPollingAsync()
+        {
+            while (_isPolling)
+            {
+                // Реалізація Short Polling: затримка 5 секунд між запитами
+                await Task.Delay(5000);
+
+                try
+                {
+                    var newOrders = await _apiService.GetOrdersAsync();
+                    
+                    // Перевіряємо, чи є зміни (проста перевірка за кількістю або останнім статусом)
+                    // Для спрощення просто оновлюємо список
+                    _allOrders = newOrders;
+                    FilterOrders();
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine("Polling error: " + ex.Message);
+                }
+            }
+        }
+
+        public void StopPolling()
+        {
+            _isPolling = false;
         }
 
         private void FilterOrders()
