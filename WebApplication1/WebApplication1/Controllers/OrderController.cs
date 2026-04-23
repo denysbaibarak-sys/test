@@ -26,6 +26,7 @@ public IHttpActionResult CreateOrder(Order order)
             }
 
             order.UserId = user.Id;
+            order.UpdatedAt = DateTime.Now;
 
             if (string.IsNullOrEmpty(order.OrderId))
             {
