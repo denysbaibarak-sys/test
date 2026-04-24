@@ -306,3 +306,5 @@ GetOrders called. Total orders: 11
 GetOrders called. Total orders: 12
 [ТЕСТ] Статус замовлення ORD-4082EE змінено на 'Доставлено'
 [POLLING] Знайдено 1 оновлених замовлень.
+System: Worker thread started.
+[ОЧИЩЕННЯ] Базу замовлень повністю видалено.
