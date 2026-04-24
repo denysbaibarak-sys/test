@@ -120,4 +120,20 @@ public IHttpActionResult CreateOrder(Order order)
             return InternalServerError(ex);
         }
     }
+    [HttpGet]
+    [Route("api/orders/simulate-delivery")]
+    public IHttpActionResult SimulateDelivery(string orderId)
+    {
+        orderService.TestUpdateOrderStatus(orderId);
+        logger.Log($"[ТЕСТ] Статус замовлення {orderId} змінено на 'Доставлено'");
+        return Ok($"Замовлення {orderId} оновлено! Перевір вікно клієнта.");
+    }
+    [HttpGet]
+    [Route("api/orders/clear")]
+    public IHttpActionResult ClearOrders()
+    {
+        orderService.ClearAllOrders();
+        logger.Log("[ОЧИЩЕННЯ] Базу замовлень повністю видалено.");
+        return Ok("Базу успішно очищено!");
+    }
 }

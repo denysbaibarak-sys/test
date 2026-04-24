@@ -102,4 +102,22 @@ public class OrderService
             .Where(o => o.UpdatedAt > lastUpdate)
             .ToList();
     }
+    public void TestUpdateOrderStatus(string orderId)
+    {
+        // Знаходимо замовлення в оперативній пам'яті сервера
+        var order = orders.FirstOrDefault(o => o.OrderId == orderId);
+
+        if (order != null)
+        {
+            order.Status = "Доставлено"; // Змінюємо статус
+            order.UpdatedAt = DateTime.Now;
+
+            SaveOrders(); // Зберігаємо нові дані у файл
+        }
+    }
+    public void ClearAllOrders()
+    {
+        orders.Clear();
+        SaveOrders();
+    }
 }
