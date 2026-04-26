@@ -23,6 +23,9 @@ public class Order
     public DateTime UpdatedAt { get; set; }
 
     [DataMember]
+    public string ItemsSummary { get; set; }
+
+    [DataMember]
     public List<Food> OrderedItems { get; set; }
 
     [DataMember]

@@ -80,7 +80,8 @@ public class OrderService
         // генерація ID, дата, статус
         if (string.IsNullOrEmpty(newOrder.OrderId))
             newOrder.OrderId = "ORD-" + Guid.NewGuid().ToString().Substring(0, 6).ToUpper();
-
+        newOrder.TotalPrice = newOrder.OrderedItems.Sum(item => item.Price * item.Quantity);
+        newOrder.ItemsSummary = string.Join(", ", newOrder.OrderedItems.Select(i => $"{i.Quantity} x {i.Name}"));
         newOrder.Status = "В обробці";
         newOrder.OrderDate = DateTime.Now.ToString("dd.MM.yyyy HH:mm");
 

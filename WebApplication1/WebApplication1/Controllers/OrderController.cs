@@ -93,7 +93,7 @@ public IHttpActionResult CreateOrder(Order order)
         {
             DateTime parsedDate;
 
-            // Якщо клієнт нічого не передав → повертаємо всі
+            // Якщо клієнт нічого не передав - повертаємо всі
             if (string.IsNullOrEmpty(lastUpdate) || !DateTime.TryParse(lastUpdate, out parsedDate))
             {
                 var allOrders = orderService.GetAllOrders();
@@ -101,10 +101,10 @@ public IHttpActionResult CreateOrder(Order order)
                 return Ok(allOrders);
             }
 
-            // Беремо лише нові (логіка напарника)
+            // Беремо лише нові
             var newOrders = orderService.GetOrdersAfter(parsedDate);
 
-            // Якщо нових немає - повертаємо 204 NoContent (і не спамимо в лог)
+            // Якщо нових немає - повертаємо 204 NoContent
             if (newOrders == null || !newOrders.Any())
             {
                 return StatusCode(System.Net.HttpStatusCode.NoContent);
