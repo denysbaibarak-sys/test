@@ -47,18 +47,16 @@ public class AuthService
     public void Register(User user)
     {
         if (string.IsNullOrWhiteSpace(user.Login))
-            throw new ArgumentException("Login is empty");
+            throw new ArgumentException("Логін порожній");
 
-        if (users.Any(u => u.Login == user.Login))
-            throw new ArgumentException("User already exists");
+        if (users.Any(u => u.Login == user.Login || u.Email == user.Email || u.Phone == user.Phone))
+            throw new ArgumentException("Користувач з таким логіном, поштою або номером телефону вже існує!");
 
-        // Ідеально! Тепер Id буде унікальним.
         user.Id = users.Any() ? users.Max(u => u.Id) + 1 : 1;
         users.Add(user);
         SaveUsers();
     }
 
-    // Повертаємо ПОВНОГО ЮЗЕРА (разом з токеном)
     public User Authenticate(string login, string password)
     {
         var user = users.FirstOrDefault(u => u.Login == login && u.Password == password);
@@ -92,19 +90,25 @@ public class AuthService
             if (!phoneRegex.IsMatch(updatedUser.Phone))
                 return false;
         }
+
         var existingUser = users.FirstOrDefault(u => u.Token == updatedUser.Token);
 
         if (existingUser != null)
         {
-            if (existingUser.Login != updatedUser.Login && users.Any(u => u.Login == updatedUser.Login))
+            bool isDuplicate = users.Any(u =>
+                u.Id != existingUser.Id &&
+                (u.Login == updatedUser.Login || u.Email == updatedUser.Email || u.Phone == updatedUser.Phone));
+
+            if (isDuplicate)
             {
                 return false;
             }
 
             existingUser.Login = updatedUser.Login;
             existingUser.Phone = updatedUser.Phone;
+            existingUser.Email = updatedUser.Email;
 
-            // 3. Оновлюємо пароль ТІЛЬКИ якщо юзер ввів новий
+            // Оновлюємо пароль тільки якщо юзер ввів новий
             if (!string.IsNullOrWhiteSpace(updatedUser.Password))
             {
                 existingUser.Password = updatedUser.Password;

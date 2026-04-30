@@ -126,7 +126,7 @@ public IHttpActionResult CreateOrder(Order order)
     {
         orderService.TestUpdateOrderStatus(orderId);
         logger.Log($"[ТЕСТ] Статус замовлення {orderId} змінено на 'Доставлено'");
-        return Ok($"Замовлення {orderId} оновлено! Перевір вікно клієнта.");
+        return Ok($"Замовлення {orderId} оновлено!");
     }
     [HttpDelete]
     [Route("api/orders/clear")]
