@@ -29,5 +29,8 @@ public class Restaurant
     public string Description { get; set; }
 
     [DataMember]
+    public string ImagePath { get; set; }
+
+    [DataMember]
     public List<Food> Menu { get; set; }
 }
