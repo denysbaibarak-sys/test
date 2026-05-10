@@ -4,17 +4,33 @@ using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Json;
 using System.Text.RegularExpressions;
-using System.Web.Hosting;
 
 public class AuthService
 {
-    private string path = HostingEnvironment.MapPath("~/App_Data/users.json");
+    private string path;
     private List<User> users;
 
-    // Словник tokens більше не потрібен, зберігаємо токени прямо в users.json!
-
-    public AuthService()
+    // Додаємо необов'язковий параметр testPath. 
+    public AuthService(string testPath = null)
     {
+        if (string.IsNullOrEmpty(testPath))
+        {
+            // Універсальний спосіб знайти папку App_Data
+            string baseDir = AppDomain.CurrentDomain.BaseDirectory;
+            string appDataPath = Path.Combine(baseDir, "App_Data");
+
+            if (!Directory.Exists(appDataPath))
+            {
+                Directory.CreateDirectory(appDataPath);
+            }
+
+            path = Path.Combine(appDataPath, "users.json");
+        }
+        else
+        {
+            path = testPath;
+        }
+
         users = LoadUsers();
     }
 
@@ -63,13 +79,11 @@ public class AuthService
 
         if (user != null)
         {
-            // Генеруємо токен і записуємо його прямо в об'єкт юзера
             user.Token = GenerateToken();
-
             SaveUsers();
         }
 
-        return user; // Віддаємо клієнту об'єкт
+        return user;
     }
 
     public User GetUserByToken(string token)
@@ -77,7 +91,6 @@ public class AuthService
         if (string.IsNullOrWhiteSpace(token))
             return null;
 
-        // Шукаємо юзера прямо в нашій базі за його токеном
         return users.FirstOrDefault(u => u.Token == token);
     }
 
@@ -85,7 +98,6 @@ public class AuthService
     {
         if (!string.IsNullOrEmpty(updatedUser.Phone))
         {
-            // Перевірка формату номера
             var phoneRegex = new Regex(@"^\+?[0-9]{10,12}$");
             if (!phoneRegex.IsMatch(updatedUser.Phone))
                 return false;
@@ -108,14 +120,12 @@ public class AuthService
             existingUser.Phone = updatedUser.Phone;
             existingUser.Email = updatedUser.Email;
 
-            // Оновлюємо пароль тільки якщо юзер ввів новий
             if (!string.IsNullOrWhiteSpace(updatedUser.Password))
             {
                 existingUser.Password = updatedUser.Password;
             }
 
             SaveUsers();
-
             return true;
         }
 

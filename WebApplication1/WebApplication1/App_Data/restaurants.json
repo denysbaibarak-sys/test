@@ -6,6 +6,7 @@
     "DeliveryTime": "30-45 хв",
     "Description": "Традиційні українські страви. Найсмачніші Ресторани домашньої кухні у місті.",
     "Distance": null,
+    "ImagePath": "ukr.jpg",
     "Menu": [
       {
         "Category": "Перші страви",
@@ -42,6 +43,7 @@
     "DeliveryTime": "15-25 хв",
     "Description": "Справжній американський Фаст-фуд. Соковиті котлети, крафтові булочки та хрустка фрі.",
     "Distance": null,
+    "ImagePath": "burger.jpg",
     "Menu": [
       {
         "Category": "Перші страви",
@@ -78,6 +80,7 @@
     "DeliveryTime": "40-60 хв",
     "Description": "Свіжі роли, суші та паназійська кухня (Інше). Преміальна риба та швидка доставка.",
     "Distance": null,
+    "ImagePath": "sushi.jpg",
     "Menu": [
       {
         "Category": "Перші страви",
@@ -114,6 +117,7 @@
     "DeliveryTime": "25-35 хв",
     "Description": "Сімейні Ресторани. Справжня італійська піца на тонкому тісті з дров'яної печі.",
     "Distance": null,
+    "ImagePath": "pizza_ita.jpg",
     "Menu": [
       {
         "Category": "Перші страви",
@@ -150,6 +154,7 @@
     "DeliveryTime": "10-20 хв",
     "Description": "Затишне місце (Інше). Найкраща кава свіжого обсмаження та крафтові десерти.",
     "Distance": null,
+    "ImagePath": "lviv.jpg",
     "Menu": [
       {
         "Category": "Перші страви",
@@ -184,13 +189,14 @@
     "Address": "Kharkiv, Sumskaya 1",
     "Category": "Fast Food",
     "DeliveryTime": "30-40 min",
+    "ImagePath": "mc.jpg",
     "Description": "Fast food restaurant",
     "Distance": "2.5 km",
     "Menu": [
       {
         "Category": "Fast Food",
         "Description": "Burger with beef",
-        "ImagePath": "/images/bigmac.jpg",
+        "ImagePath": null,
         "Name": "Big Mac",
         "Price": 120.00,
         "Quantity": 1
@@ -198,7 +204,7 @@
       {
         "Category": "Fast Food",
         "Description": "Potatoes",
-        "ImagePath": "/images/fries.jpg",
+        "ImagePath": null,
         "Name": "Fries",
         "Price": 50.00,
         "Quantity": 1
