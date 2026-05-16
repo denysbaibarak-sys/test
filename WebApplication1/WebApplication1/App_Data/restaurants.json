@@ -11,7 +11,7 @@
       {
         "Category": "Перші страви",
         "Description": "Традиційний борщ з пампушками та салом.",
-        "ImagePath": null,
+        "ImagePath": "borsh.jpg",
         "Name": "Борщ український",
         "Price": 145.00,
         "Quantity": 0
@@ -19,7 +19,7 @@
       {
         "Category": "Основні страви",
         "Description": "Домашні вареники зі шкварками та сметаною.",
-        "ImagePath": null,
+        "ImagePath": "vareniki.jpg",
         "Name": "Вареники з картоплею",
         "Price": 120.00,
         "Quantity": 0
@@ -27,7 +27,7 @@
       {
         "Category": "Напої",
         "Description": "Прохолодний напій із сухофруктів.",
-        "ImagePath": null,
+        "ImagePath": "uzvar.jpg",
         "Name": "Узвар",
         "Price": 45.00,
         "Quantity": 0
@@ -48,7 +48,7 @@
       {
         "Category": "Перші страви",
         "Description": "Крем-суп з плавленим сиром та крутонами.",
-        "ImagePath": null,
+        "ImagePath": "krem.jpg",
         "Name": "Сирний Суп",
         "Price": 95.00,
         "Quantity": 0
@@ -56,7 +56,7 @@
       {
         "Category": "Основні страви",
         "Description": "Дві котлети з яловичини, сир чеддер, бекон, соус BBQ.",
-        "ImagePath": null,
+        "ImagePath": "burg.jpg",
         "Name": "Подвійний Чізбургер",
         "Price": 210.00,
         "Quantity": 0
@@ -64,7 +64,7 @@
       {
         "Category": "Напої",
         "Description": "Холодний газований напій 0.5л.",
-        "ImagePath": null,
+        "ImagePath": "kola.jpg",
         "Name": "Кока-Кола",
         "Price": 40.00,
         "Quantity": 0
@@ -85,7 +85,7 @@
       {
         "Category": "Перші страви",
         "Description": "Традиційний японський суп з тофу та водоростями вакаме.",
-        "ImagePath": null,
+        "ImagePath": "miso.jpg",
         "Name": "Місо суп",
         "Price": 110.00,
         "Quantity": 0
@@ -93,7 +93,7 @@
       {
         "Category": "Основні страви",
         "Description": "Лосось, крем-сир, огірок, рис, норі.",
-        "ImagePath": null,
+        "ImagePath": "roll.jpg",
         "Name": "Рол Філадельфія",
         "Price": 295.00,
         "Quantity": 0
@@ -101,7 +101,7 @@
       {
         "Category": "Напої",
         "Description": "Японський порошковий зелений чай.",
-        "ImagePath": null,
+        "ImagePath": "matcha.jpg",
         "Name": "Зелений чай Маття",
         "Price": 75.00,
         "Quantity": 0
@@ -122,7 +122,7 @@
       {
         "Category": "Перші страви",
         "Description": "Легкий італійський овочевий суп.",
-        "ImagePath": null,
+        "ImagePath": "mino.jpg",
         "Name": "Мінестроне",
         "Price": 130.00,
         "Quantity": 0
@@ -130,7 +130,7 @@
       {
         "Category": "Основні страви",
         "Description": "Томатний соус, сир моцарела, базилік (30 см).",
-        "ImagePath": null,
+        "ImagePath": "margarita.jpg",
         "Name": "Піца Маргарита",
         "Price": 190.00,
         "Quantity": 0
@@ -138,7 +138,7 @@
       {
         "Category": "Напої",
         "Description": "Освіжаючий домашній лимонад з м'ятою.",
-        "ImagePath": null,
+        "ImagePath": "lemonad.jpg",
         "Name": "Лимонад",
         "Price": 60.00,
         "Quantity": 0
@@ -159,7 +159,7 @@
       {
         "Category": "Перші страви",
         "Description": "Солодка вівсянка з ягодами та горіхами.",
-        "ImagePath": null,
+        "ImagePath": "vivs.jpg",
         "Name": "Сніданок вівсянка",
         "Price": 85.00,
         "Quantity": 0
@@ -167,7 +167,7 @@
       {
         "Category": "Основні страви",
         "Description": "Класичний сирний десерт.",
-        "ImagePath": null,
+        "ImagePath": "nuy.jpg",
         "Name": "Чизкейк Нью-Йорк",
         "Price": 115.00,
         "Quantity": 0
@@ -175,7 +175,7 @@
       {
         "Category": "Напої",
         "Description": "Еспресо з гарячим молоком та густою пінкою.",
-        "ImagePath": null,
+        "ImagePath": "1kofe.jpg",
         "Name": "Капучино",
         "Price": 65.00,
         "Quantity": 0
@@ -196,15 +196,15 @@
       {
         "Category": "Fast Food",
         "Description": "Burger with beef",
-        "ImagePath": null,
+        "ImagePath": "big.jpg",
         "Name": "Big Mac",
         "Price": 120.00,
         "Quantity": 1
       },
       {
         "Category": "Fast Food",
-        "Description": "Potatoes",
-        "ImagePath": null,
+        "Description": "Картопля",
+        "ImagePath": "fries.jpg",
         "Name": "Fries",
         "Price": 50.00,
         "Quantity": 1
