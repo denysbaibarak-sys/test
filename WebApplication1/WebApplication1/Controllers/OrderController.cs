@@ -25,6 +25,12 @@ public IHttpActionResult CreateOrder(Order order)
                 return Unauthorized();
             }
 
+            if (string.IsNullOrWhiteSpace(user.Phone))
+            {
+                logger.Log($"[БЕЗПЕКА] Відхилено замовлення від {user.Login}: відсутній номер телефону.");
+                return BadRequest("Для оформлення замовлення необхідно вказати номер телефону в профілі.");
+            }
+
             order.UserId = user.Id;
             order.UpdatedAt = DateTime.Now;
 
@@ -120,6 +126,7 @@ public IHttpActionResult CreateOrder(Order order)
             return InternalServerError(ex);
         }
     }
+
     [HttpGet]
     [Route("api/orders/simulate-delivery")]
     public IHttpActionResult SimulateDelivery(string orderId)
