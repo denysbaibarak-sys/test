@@ -49,7 +49,7 @@ public class AuthService
         if (string.IsNullOrWhiteSpace(user.Login))
             throw new ArgumentException("Логін порожній");
 
-        if (users.Any(u => u.Login == user.Login || u.Email == user.Email || u.Phone == user.Phone))
+        if (users.Any(u => u.Login == user.Login || u.Email == user.Email))
             throw new ArgumentException("Користувач з таким логіном, поштою або номером телефону вже існує!");
 
         user.Id = users.Any() ? users.Max(u => u.Id) + 1 : 1;
