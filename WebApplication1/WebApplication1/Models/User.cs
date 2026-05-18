@@ -25,4 +25,7 @@ public class User
 
     [DataMember]
     public string Address { get; set; }
+    
+    [DataMember]
+    public string Role { get; set; } = "Customer";
 }

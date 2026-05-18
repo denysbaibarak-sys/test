@@ -51,7 +51,8 @@ public class AuthService
 
         if (users.Any(u => u.Login == user.Login || u.Email == user.Email))
             throw new ArgumentException("Користувач з таким логіном, поштою або номером телефону вже існує!");
-
+        
+        user.Role = "Customer";
         user.Id = users.Any() ? users.Max(u => u.Id) + 1 : 1;
         users.Add(user);
         SaveUsers();
