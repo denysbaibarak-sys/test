@@ -57,20 +57,28 @@ public class AuthService
         users.Add(user);
         SaveUsers();
     }
+    public void UpdateUserRole(int userId, string newRole)
+    {
+        var user = users.FirstOrDefault(u => u.Id == userId);
 
+        if (user != null)
+        {
+            user.Role = newRole;
+            SaveUsers();
+        }
+    }
     public User Authenticate(string login, string password)
     {
         var user = users.FirstOrDefault(u => u.Login == login && u.Password == password);
 
         if (user != null)
         {
-            // Генеруємо токен і записуємо його прямо в об'єкт юзера
             user.Token = GenerateToken();
 
             SaveUsers();
         }
 
-        return user; // Віддаємо клієнту об'єкт
+        return user; 
     }
 
     public User GetUserByToken(string token)
@@ -78,7 +86,6 @@ public class AuthService
         if (string.IsNullOrWhiteSpace(token))
             return null;
 
-        // Шукаємо юзера прямо в нашій базі за його токеном
         return users.FirstOrDefault(u => u.Token == token);
     }
 
@@ -86,7 +93,6 @@ public class AuthService
     {
         if (!string.IsNullOrEmpty(updatedUser.Phone))
         {
-            // Перевірка формату номера
             var phoneRegex = new Regex(@"^\+?[0-9]{10,12}$");
             if (!phoneRegex.IsMatch(updatedUser.Phone))
                 return false;
@@ -109,7 +115,6 @@ public class AuthService
             existingUser.Phone = updatedUser.Phone;
             existingUser.Email = updatedUser.Email;
 
-            // Оновлюємо пароль тільки якщо юзер ввів новий
             if (!string.IsNullOrWhiteSpace(updatedUser.Password))
             {
                 existingUser.Password = updatedUser.Password;

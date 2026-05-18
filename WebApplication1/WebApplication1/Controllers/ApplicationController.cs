@@ -99,17 +99,8 @@ public class ApplicationController : ApiController
         {
             app.Status = "Approved";
 
-            if (File.Exists(usersPath))
-            {
-                var serializer = new DataContractJsonSerializer(typeof(List<User>));
-                List<User> allUsers;
-                using (FileStream fs = new FileStream(usersPath, FileMode.Open)) { allUsers = (List<User>)serializer.ReadObject(fs); }
+            new AuthService().UpdateUserRole(app.UserId, "Owner");
 
-                var targetUser = allUsers.FirstOrDefault(u => u.Id == app.UserId);
-                if (targetUser != null) targetUser.Role = "Owner";
-
-                using (FileStream fs = new FileStream(usersPath, FileMode.Create)) { serializer.WriteObject(fs, allUsers); }
-            }
             logger.Log($"[АДМІН] Заявку {id} СХВАЛЕНО. Користувач ID {app.UserId} тепер Owner.");
         }
         else if (action.Equals("Reject", StringComparison.OrdinalIgnoreCase))
