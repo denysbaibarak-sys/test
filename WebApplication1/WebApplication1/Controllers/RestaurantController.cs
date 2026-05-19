@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Web.Http;
 
@@ -10,7 +11,7 @@ public class RestaurantController : ApiController
     private Validator validator = new Validator();
 
     [HttpPost]
-    [Route("api/restaurants")]
+    [Route("api/restaurants/add")]
     public IHttpActionResult AddRestaurant(Restaurant restaurant)
     {
         try
@@ -20,10 +21,20 @@ public class RestaurantController : ApiController
             validator.ValidateRestaurant(restaurant);
 
             var restaurants = fileService.LoadRestaurants();
+
+            if (restaurants.Any())
+            {
+                restaurant.Id = restaurants.Max(r => r.Id) + 1;
+            }
+            else
+            {
+                restaurant.Id = 1;
+            }
+
             restaurants.Add(restaurant);
             fileService.SaveRestaurants(restaurants);
 
-            logger.Log($"[ВІДПРАВЛЕНО] Ресторан '{restaurant.Name}' успішно додано до бази.");
+            logger.Log($"[ВІДПРАВЛЕНО] Ресторан '{restaurant.Name}' успішно додано до бази під Id {restaurant.Id}.");
 
             return StatusCode(HttpStatusCode.Created);
         }

@@ -38,7 +38,7 @@ public class UserController : ApiController
         if (loggedInUser != null)
         {
             logger.Log($"[ВІДПРАВЛЕНО] Успішна авторизація: {user.Login}");
-            return Ok(loggedInUser); // Віддаємо клієнту ВЕСЬ об'єкт юзера
+            return Ok(loggedInUser);
         }
 
         logger.Log($"[ПОМИЛКА] Невдала спроба авторизації: {user.Login}");

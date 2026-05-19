@@ -2,37 +2,49 @@
 using System.IO;
 using System.Net;
 using System.Net.Http;
-using System.Web;
+using System.Threading.Tasks;
 using System.Web.Http;
 
-namespace WebApplication1.Controllers
+public class MediaController : ApiController
 {
-    public class MediaController : ApiController
+    private Logger logger = new Logger();
+
+    [HttpPost]
+    [Route("api/media/upload")]
+    public async Task<IHttpActionResult> UploadImage()
     {
-        [HttpPost]
-        [Route("api/media/upload")]
-        public HttpResponseMessage UploadImage()
+        if (!Request.Content.IsMimeMultipartContent())
         {
-            var httpRequest = HttpContext.Current.Request;
-            if (httpRequest.Files.Count > 0)
+            return StatusCode(HttpStatusCode.UnsupportedMediaType);
+        }
+
+        try
+        {
+            string root = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Images");
+
+            if (!Directory.Exists(root))
             {
-                var file = httpRequest.Files[0];
-
-                var folderPath = HttpContext.Current.Server.MapPath("~/Images");
-
-                if (!Directory.Exists(folderPath))
-                {
-                    Directory.CreateDirectory(folderPath);
-                }
-
-                var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
-                var filePath = Path.Combine(folderPath, fileName);
-                file.SaveAs(filePath);
-
-                return Request.CreateResponse(HttpStatusCode.OK, new { fileName = fileName });
+                Directory.CreateDirectory(root);
             }
 
-            return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Файл не знайдено");
+            var provider = new MultipartFormDataStreamProvider(root);
+            await Request.Content.ReadAsMultipartAsync(provider);
+
+            var fileData = provider.FileData[0];
+            string originalFileName = fileData.Headers.ContentDisposition.FileName.Trim('"');
+            string uniqueFileName = Guid.NewGuid().ToString("N").Substring(0, 8) + "_" + originalFileName;
+            string newPath = Path.Combine(root, uniqueFileName);
+
+            File.Move(fileData.LocalFileName, newPath);
+
+            logger.Log($"[МЕДІА] Успішно завантажено файл: {uniqueFileName}");
+
+            return Ok(new { fileName = uniqueFileName });
+        }
+        catch (Exception ex)
+        {
+            logger.Log($"[ПОМИЛКА МЕДІА] Помилка завантаження файлу: {ex.Message}");
+            return InternalServerError(ex);
         }
     }
 }

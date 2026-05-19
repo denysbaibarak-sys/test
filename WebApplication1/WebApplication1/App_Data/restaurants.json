@@ -6,11 +6,12 @@
     "DeliveryTime": "30-45 хв",
     "Description": "Традиційні українські страви. Найсмачніші Ресторани домашньої кухні у місті.",
     "Distance": null,
+    "ImagePath": "ukr.jpg",
     "Menu": [
       {
         "Category": "Перші страви",
         "Description": "Традиційний борщ з пампушками та салом.",
-        "ImagePath": null,
+        "ImagePath": "borsh.jpg",
         "Name": "Борщ український",
         "Price": 145.00,
         "Quantity": 0
@@ -18,7 +19,7 @@
       {
         "Category": "Основні страви",
         "Description": "Домашні вареники зі шкварками та сметаною.",
-        "ImagePath": null,
+        "ImagePath": "vareniki.jpg",
         "Name": "Вареники з картоплею",
         "Price": 120.00,
         "Quantity": 0
@@ -26,7 +27,7 @@
       {
         "Category": "Напої",
         "Description": "Прохолодний напій із сухофруктів.",
-        "ImagePath": null,
+        "ImagePath": "uzvar.jpg",
         "Name": "Узвар",
         "Price": 45.00,
         "Quantity": 0
@@ -42,11 +43,12 @@
     "DeliveryTime": "15-25 хв",
     "Description": "Справжній американський Фаст-фуд. Соковиті котлети, крафтові булочки та хрустка фрі.",
     "Distance": null,
+    "ImagePath": "burger.jpg",
     "Menu": [
       {
         "Category": "Перші страви",
         "Description": "Крем-суп з плавленим сиром та крутонами.",
-        "ImagePath": null,
+        "ImagePath": "krem.jpg",
         "Name": "Сирний Суп",
         "Price": 95.00,
         "Quantity": 0
@@ -54,7 +56,7 @@
       {
         "Category": "Основні страви",
         "Description": "Дві котлети з яловичини, сир чеддер, бекон, соус BBQ.",
-        "ImagePath": null,
+        "ImagePath": "burg.jpg",
         "Name": "Подвійний Чізбургер",
         "Price": 210.00,
         "Quantity": 0
@@ -62,7 +64,7 @@
       {
         "Category": "Напої",
         "Description": "Холодний газований напій 0.5л.",
-        "ImagePath": null,
+        "ImagePath": "kola.jpg",
         "Name": "Кока-Кола",
         "Price": 40.00,
         "Quantity": 0
@@ -78,11 +80,12 @@
     "DeliveryTime": "40-60 хв",
     "Description": "Свіжі роли, суші та паназійська кухня (Інше). Преміальна риба та швидка доставка.",
     "Distance": null,
+    "ImagePath": "sushi.jpg",
     "Menu": [
       {
         "Category": "Перші страви",
         "Description": "Традиційний японський суп з тофу та водоростями вакаме.",
-        "ImagePath": null,
+        "ImagePath": "miso.jpg",
         "Name": "Місо суп",
         "Price": 110.00,
         "Quantity": 0
@@ -90,7 +93,7 @@
       {
         "Category": "Основні страви",
         "Description": "Лосось, крем-сир, огірок, рис, норі.",
-        "ImagePath": null,
+        "ImagePath": "roll.jpg",
         "Name": "Рол Філадельфія",
         "Price": 295.00,
         "Quantity": 0
@@ -98,7 +101,7 @@
       {
         "Category": "Напої",
         "Description": "Японський порошковий зелений чай.",
-        "ImagePath": null,
+        "ImagePath": "matcha.jpg",
         "Name": "Зелений чай Маття",
         "Price": 75.00,
         "Quantity": 0
@@ -114,11 +117,12 @@
     "DeliveryTime": "25-35 хв",
     "Description": "Сімейні Ресторани. Справжня італійська піца на тонкому тісті з дров'яної печі.",
     "Distance": null,
+    "ImagePath": "pizza_ita.jpg",
     "Menu": [
       {
         "Category": "Перші страви",
         "Description": "Легкий італійський овочевий суп.",
-        "ImagePath": null,
+        "ImagePath": "mino.jpg",
         "Name": "Мінестроне",
         "Price": 130.00,
         "Quantity": 0
@@ -126,7 +130,7 @@
       {
         "Category": "Основні страви",
         "Description": "Томатний соус, сир моцарела, базилік (30 см).",
-        "ImagePath": null,
+        "ImagePath": "margarita.jpg",
         "Name": "Піца Маргарита",
         "Price": 190.00,
         "Quantity": 0
@@ -134,7 +138,7 @@
       {
         "Category": "Напої",
         "Description": "Освіжаючий домашній лимонад з м'ятою.",
-        "ImagePath": null,
+        "ImagePath": "lemonad.jpg",
         "Name": "Лимонад",
         "Price": 60.00,
         "Quantity": 0
@@ -150,11 +154,12 @@
     "DeliveryTime": "10-20 хв",
     "Description": "Затишне місце (Інше). Найкраща кава свіжого обсмаження та крафтові десерти.",
     "Distance": null,
+    "ImagePath": "lviv.jpg",
     "Menu": [
       {
         "Category": "Перші страви",
         "Description": "Солодка вівсянка з ягодами та горіхами.",
-        "ImagePath": null,
+        "ImagePath": "vivs.jpg",
         "Name": "Сніданок вівсянка",
         "Price": 85.00,
         "Quantity": 0
@@ -162,7 +167,7 @@
       {
         "Category": "Основні страви",
         "Description": "Класичний сирний десерт.",
-        "ImagePath": null,
+        "ImagePath": "nuy.jpg",
         "Name": "Чизкейк Нью-Йорк",
         "Price": 115.00,
         "Quantity": 0
@@ -170,7 +175,7 @@
       {
         "Category": "Напої",
         "Description": "Еспресо з гарячим молоком та густою пінкою.",
-        "ImagePath": null,
+        "ImagePath": "1kofe.jpg",
         "Name": "Капучино",
         "Price": 65.00,
         "Quantity": 0
@@ -184,21 +189,22 @@
     "Address": "Kharkiv, Sumskaya 1",
     "Category": "Fast Food",
     "DeliveryTime": "30-40 min",
+    "ImagePath": "mc.jpg",
     "Description": "Fast food restaurant",
     "Distance": "2.5 km",
     "Menu": [
       {
         "Category": "Fast Food",
         "Description": "Burger with beef",
-        "ImagePath": "/images/bigmac.jpg",
+        "ImagePath": "big.jpg",
         "Name": "Big Mac",
         "Price": 120.00,
         "Quantity": 1
       },
       {
         "Category": "Fast Food",
-        "Description": "Potatoes",
-        "ImagePath": "/images/fries.jpg",
+        "Description": "Картопля",
+        "ImagePath": "fries.jpg",
         "Name": "Fries",
         "Price": 50.00,
         "Quantity": 1

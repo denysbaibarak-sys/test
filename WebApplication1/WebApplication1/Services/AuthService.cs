@@ -11,8 +11,6 @@ public class AuthService
     private string path = HostingEnvironment.MapPath("~/App_Data/users.json");
     private List<User> users;
 
-    // Словник tokens більше не потрібен, зберігаємо токени прямо в users.json!
-
     public AuthService()
     {
         users = LoadUsers();
@@ -49,9 +47,14 @@ public class AuthService
         if (string.IsNullOrWhiteSpace(user.Login))
             throw new ArgumentException("Логін порожній");
 
-        if (users.Any(u => u.Login == user.Login || u.Email == user.Email))
-            throw new ArgumentException("Користувач з таким логіном, поштою або номером телефону вже існує!");
-        
+        bool isDuplicate = users.Any(u =>
+            (!string.IsNullOrWhiteSpace(u.Login) && u.Login.Equals(user.Login, StringComparison.OrdinalIgnoreCase)) ||
+            (!string.IsNullOrWhiteSpace(u.Email) && u.Email.Equals(user.Email, StringComparison.OrdinalIgnoreCase))
+        );
+
+        if (isDuplicate)
+            throw new ArgumentException("Користувач з таким логіном або поштою вже існує!");
+
         user.Role = "Customer";
         user.Id = users.Any() ? users.Max(u => u.Id) + 1 : 1;
         users.Add(user);
