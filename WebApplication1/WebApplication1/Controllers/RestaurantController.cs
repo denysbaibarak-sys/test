@@ -62,4 +62,43 @@ public class RestaurantController : ApiController
 
         return restaurants;
     }
+    [HttpPut]
+    [Route("api/restaurants/update")]
+    public IHttpActionResult UpdateRestaurant(Restaurant updatedRestaurant)
+    {
+        try
+        {
+            var restaurants = fileService.LoadRestaurants();
+
+            var existingRest = restaurants.FirstOrDefault(r => r.Id == updatedRestaurant.Id);
+
+            if (existingRest == null)
+            {
+                return NotFound();
+            }
+
+            if (existingRest.OwnerId != updatedRestaurant.OwnerId)
+            {
+                return Unauthorized();
+            }
+
+            existingRest.Name = updatedRestaurant.Name;
+            existingRest.Category = updatedRestaurant.Category;
+            existingRest.DeliveryTime = updatedRestaurant.DeliveryTime;
+            existingRest.Description = updatedRestaurant.Description;
+            existingRest.ImagePath = updatedRestaurant.ImagePath;
+            existingRest.Address = updatedRestaurant.Address;
+            existingRest.Menu = updatedRestaurant.Menu;
+
+            fileService.SaveRestaurants(restaurants);
+
+            logger.Log($"[ОНОВЛЕНО] Ресторан '{existingRest.Name}' успішно відредаговано власником.");
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            logger.Log($"[ПОМИЛКА] Під час оновлення ресторану: {ex.Message}");
+            return InternalServerError(ex);
+        }
+    }
 }
