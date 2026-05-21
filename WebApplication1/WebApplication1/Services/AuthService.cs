@@ -9,11 +9,20 @@ using System.Web.Hosting;
 public class AuthService
 {
     private string path = HostingEnvironment.MapPath("~/App_Data/users.json");
-    private List<User> users;
-
+    private static List<User> users;
+    private static readonly object _lock = new object();
     public AuthService()
     {
-        users = LoadUsers();
+        if (users == null)
+        {
+            lock (_lock)
+            {
+                if (users == null)
+                {
+                    users = LoadUsers();
+                }
+            }
+        }
     }
 
     private List<User> LoadUsers()
@@ -35,10 +44,13 @@ public class AuthService
 
     private void SaveUsers()
     {
-        var serializer = new DataContractJsonSerializer(typeof(List<User>));
-        using (FileStream fs = new FileStream(path, FileMode.Create))
+        lock (_lock)
         {
-            serializer.WriteObject(fs, users);
+            var serializer = new DataContractJsonSerializer(typeof(List<User>));
+            using (FileStream fs = new FileStream(path, FileMode.Create))
+            {
+                serializer.WriteObject(fs, users);
+            }
         }
     }
 
@@ -56,9 +68,12 @@ public class AuthService
             throw new ArgumentException("Користувач з таким логіном або поштою вже існує!");
 
         user.Role = "Customer";
-        user.Id = users.Any() ? users.Max(u => u.Id) + 1 : 1;
-        users.Add(user);
-        SaveUsers();
+        lock (_lock)
+        {
+            user.Id = users.Any() ? users.Max(u => u.Id) + 1 : 1;
+            users.Add(user);
+            SaveUsers();
+        }
     }
     public void UpdateUserRole(int userId, string newRole)
     {
@@ -96,7 +111,7 @@ public class AuthService
     {
         if (!string.IsNullOrEmpty(updatedUser.Phone))
         {
-            var phoneRegex = new Regex(@"^\+?[0-9]{10,12}$");
+            var phoneRegex = new Regex(@"^\+?[0-9]{10,13}$");
             if (!phoneRegex.IsMatch(updatedUser.Phone))
                 return false;
         }
@@ -107,21 +122,24 @@ public class AuthService
         {
             bool isDuplicate = users.Any(u =>
                 u.Id != existingUser.Id &&
-                (u.Login == updatedUser.Login || u.Email == updatedUser.Email || u.Phone == updatedUser.Phone));
+                (
+                    (!string.IsNullOrWhiteSpace(u.Login) && u.Login.Equals(updatedUser.Login, StringComparison.OrdinalIgnoreCase)) ||
+                    (!string.IsNullOrWhiteSpace(updatedUser.Phone) && !string.IsNullOrWhiteSpace(u.Phone) && u.Phone == updatedUser.Phone)
+                ));
 
             if (isDuplicate)
             {
-                return false;
+                return false; 
             }
 
-            existingUser.Login = updatedUser.Login;
-            existingUser.Phone = updatedUser.Phone;
-            existingUser.Email = updatedUser.Email;
+            if (!string.IsNullOrWhiteSpace(updatedUser.Login))
+                existingUser.Login = updatedUser.Login;
+
+            if (!string.IsNullOrWhiteSpace(updatedUser.Phone))
+                existingUser.Phone = updatedUser.Phone;
 
             if (!string.IsNullOrWhiteSpace(updatedUser.Password))
-            {
                 existingUser.Password = updatedUser.Password;
-            }
 
             SaveUsers();
 

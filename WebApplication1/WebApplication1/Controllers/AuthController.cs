@@ -74,7 +74,7 @@ public class UserController : ApiController
                 if (isUpdated)
                     logger.Log($"[ОБРОБЛЕНО ВОРКЕРОМ] Профіль {updatedUser.Login} успішно оновлено в базі.");
                 else
-                    logger.Log($"[ПОМИЛКА ВОРКЕРА] Не вдалося оновити профіль {updatedUser.Login} (можливо, логін вже зайнятий).");
+                    logger.Log($"[ПОМИЛКА ВОРКЕРА] Не вдалося оновити профіль {updatedUser.Login}. Логін або телефон вже використовується іншим користувачем!");
             }
             catch (Exception ex)
             {
@@ -85,5 +85,25 @@ public class UserController : ApiController
         logger.Log($"[ВІДПРАВЛЕНО] Відповідь клієнту: Запит на оновлення профілю додано в чергу.");
 
         return Ok();
+    }
+    [HttpGet]
+    [Route("api/users/me")]
+    public IHttpActionResult GetCurrentUser()
+    {
+        try
+        {
+            var token = Request.Headers.Authorization?.Parameter;
+            var user = authService.GetUserByToken(token);
+
+            if (user != null)
+            {
+                return Ok(user);
+            }
+            return Unauthorized();
+        }
+        catch (Exception ex)
+        {
+            return InternalServerError(ex);
+        }
     }
 }

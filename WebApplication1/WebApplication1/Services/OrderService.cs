@@ -51,7 +51,6 @@ public class OrderService
 
     public void AddOrder(Order newOrder)
     {
-        // Базова перевірка
         if (newOrder == null || newOrder.OrderedItems == null || newOrder.OrderedItems.Count == 0)
             throw new ArgumentException("Order is empty or invalid");
 
@@ -74,7 +73,6 @@ public class OrderService
             }
         }
 
-        // Автоматично підтягуємо правильну назву ресторану
         newOrder.RestaurantName = targetRestaurant.Name;
 
         // генерація ID, дата, статус
@@ -85,7 +83,6 @@ public class OrderService
         newOrder.Status = "В обробці";
         newOrder.OrderDate = DateTime.Now.ToString("dd.MM.yyyy HH:mm");
 
-        // Фіксуємо час створення/оновлення
         newOrder.UpdatedAt = DateTime.Now;
 
         orders.Add(newOrder);
@@ -105,15 +102,14 @@ public class OrderService
     }
     public void TestUpdateOrderStatus(string orderId)
     {
-        // Знаходимо замовлення в оперативній пам'яті сервера
         var order = orders.FirstOrDefault(o => o.OrderId == orderId);
 
         if (order != null)
         {
-            order.Status = "Доставлено"; // Змінюємо статус
+            order.Status = "Доставлено";
             order.UpdatedAt = DateTime.Now;
 
-            SaveOrders(); // Зберігаємо нові дані у файл
+            SaveOrders();
         }
     }
     public void ClearAllOrders()
