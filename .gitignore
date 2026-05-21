@@ -408,3 +408,4 @@ obj/
 # Конец https://www.toptal.com/developers/gitignore/api/visualstudio
 /WebApplication1/WebApplication1/Images/82d9faa1_ff.jpg
 /WebApplication1/WebApplication1/Images/6868c19d_burg.jpg
+/WebApplication1/WebApplication1/App_Data/applications.json
