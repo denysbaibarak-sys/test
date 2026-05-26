@@ -1,0 +1,160 @@
+﻿<!DOCTYPE html>
+<html lang="uk">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Leaflet Map</title>
+
+    <link rel="stylesheet"
+          href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
+
+        #map {
+            width: 100%;
+            height: 100vh;
+        }
+
+        .info {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 1000;
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+            font-family: Arial;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        button {
+            margin-top: 5px;
+            width: 100%;
+            padding: 6px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="info">
+
+        <div>
+            <b>LAT:</b>
+            <span id="lat">0</span>
+            <br>
+
+            <b>LNG:</b>
+            <span id="lng">0</span>
+        </div>
+
+        <button onclick="saveCoordinates()">
+            Зберегти координати
+        </button>
+
+    </div>
+
+    <div id="map"></div>
+
+    <script>
+
+        
+        const map = L.map('map').setView([50.4501, 30.5234], 13);
+
+        
+        L.tileLayer(
+            'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+            {
+                attribution: '&copy; OpenStreetMap'
+            }
+        ).addTo(map);
+
+        
+        let marker = L.marker(
+            [50.4501, 30.5234],
+            {
+                draggable: true
+            }
+        ).addTo(map);
+
+        
+        function updateCoordinates(lat, lng) {
+
+            document.getElementById("lat").innerText = lat;
+            document.getElementById("lng").innerText = lng;
+
+        }
+
+        updateCoordinates(50.4501, 30.5234);
+
+        
+        map.on('click', function (e) {
+
+            const lat = e.latlng.lat;
+            const lng = e.latlng.lng;
+
+            marker.setLatLng(e.latlng);
+
+            updateCoordinates(lat, lng);
+
+        });
+
+        
+        marker.on('dragend', function () {
+
+            const pos = marker.getLatLng();
+
+            updateCoordinates(pos.lat, pos.lng);
+
+        });
+
+        
+        function saveCoordinates() {
+
+            const lat = document.getElementById("lat").innerText;
+            const lng = document.getElementById("lng").innerText;
+
+            const token = localStorage.getItem("Token");
+            console.log("TOKEN FROM LOCALSTORAGE:", localStorage.getItem("token"));
+
+            fetch("https://localhost:44333/api/map/save", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer" + token   
+                },
+                body: JSON.stringify({
+                    latitude: parseFloat(lat),
+                    longitude: parseFloat(lng)
+                })
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Server error: " + response.status);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log("Saved:", data);
+                    alert("Координати збережено!");
+                })
+                .catch(err => {
+                    console.error(err);
+                    alert(err.message);
+                });
+        }
+        console.log("HEADERS SENDING REQUEST");
+    </script>
+
+</body>
+
+</html>
