@@ -56,8 +56,18 @@ public class AuthService
 
     public void Register(User user)
     {
-        if (string.IsNullOrWhiteSpace(user.Login))
-            throw new ArgumentException("Логін порожній");
+        // 1. Швидка перевірка довжини
+        if (string.IsNullOrWhiteSpace(user.Login) || user.Login.Length < 3 || user.Login.Length > 20)
+        {
+            throw new ArgumentException("Логін має бути від 3 до 20 символів.");
+        }
+
+        // 2. Перевірка формату (мінімум 3 букви на початку)
+        var loginRegex = new Regex(@"^[a-zA-Zа-яА-ЯіІїЇєЄґҐ]{3}[a-zA-Zа-яА-ЯіІїЇєЄґҐ0-9_\-]{0,17}$");
+        if (!loginRegex.IsMatch(user.Login))
+        {
+            throw new ArgumentException("Формат логіну невірний. Має починатися з 3 літер.");
+        }
 
         bool isDuplicate = users.Any(u =>
             (!string.IsNullOrWhiteSpace(u.Login) && u.Login.Equals(user.Login, StringComparison.OrdinalIgnoreCase)) ||
@@ -116,6 +126,20 @@ public class AuthService
                 return false;
         }
 
+        if (!string.IsNullOrWhiteSpace(updatedUser.Login))
+        {
+            if (updatedUser.Login.Length < 3 || updatedUser.Login.Length > 20)
+            {
+                return false;
+            }
+
+            var loginRegex = new Regex(@"^[a-zA-Zа-яА-ЯіІїЇєЄґҐ]{3}[a-zA-Zа-яА-ЯіІїЇєЄґҐ0-9_\-]{0,17}$");
+            if (!loginRegex.IsMatch(updatedUser.Login))
+            {
+                return false;
+            }
+        }
+
         var existingUser = users.FirstOrDefault(u => u.Token == updatedUser.Token);
 
         if (existingUser != null)
@@ -129,7 +153,7 @@ public class AuthService
 
             if (isDuplicate)
             {
-                return false; 
+                return false;
             }
 
             if (!string.IsNullOrWhiteSpace(updatedUser.Login))
@@ -140,6 +164,9 @@ public class AuthService
 
             if (!string.IsNullOrWhiteSpace(updatedUser.Password))
                 existingUser.Password = updatedUser.Password;
+
+            if (!string.IsNullOrWhiteSpace(updatedUser.Address))
+                existingUser.Address = updatedUser.Address;
 
             SaveUsers();
 
