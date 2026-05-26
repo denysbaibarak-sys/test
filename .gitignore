@@ -409,3 +409,7 @@ obj/
 /WebApplication1/WebApplication1/Images/82d9faa1_ff.jpg
 /WebApplication1/WebApplication1/Images/6868c19d_burg.jpg
 /WebApplication1/WebApplication1/App_Data/applications.json
+/WebApplication1/WebApplication1/Services/AuthService.cs
+/WebApplication1/WebApplication1/App_Data/users.json
+/WebApplication1/WebApplication1/App_Data/restaurants.json
+/WebApplication1/WebApplication1/App_Data/log.txt
