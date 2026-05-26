@@ -29,132 +29,121 @@
             left: 10px;
             z-index: 1000;
             background: white;
-            padding: 10px;
+            padding: 15px;
             border-radius: 8px;
-            font-family: Arial;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            font-family: 'Segoe UI', Arial, sans-serif;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            min-width: 200px;
         }
 
-        button {
-            margin-top: 5px;
+        .btn-save {
+            margin-top: 10px;
             width: 100%;
-            padding: 6px;
+            padding: 10px;
+            background-color: #10B981;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
             cursor: pointer;
+            transition: background 0.2s;
         }
+
+            .btn-save:hover {
+                background-color: #059669;
+            }
     </style>
 </head>
-
 <body>
 
     <div class="info">
-
-        <div>
-            <b>LAT:</b>
-            <span id="lat">0</span>
-            <br>
-
-            <b>LNG:</b>
-            <span id="lng">0</span>
+        <div style="margin-bottom: 10px; color: #64748B; font-size: 14px;">
+            <b>LAT:</b> <span id="lat">0</span><br>
+            <b>LNG:</b> <span id="lng">0</span>
         </div>
 
-        <button onclick="saveCoordinates()">
-            Зберегти координати
+        <button class="btn-save" onclick="saveCoordinates()">
+            Підтвердити адресу
         </button>
-
     </div>
 
     <div id="map"></div>
 
     <script>
 
-        
-        const map = L.map('map').setView([50.4501, 30.5234], 13);
+        const geoapifyKey = '5b30df56549e4a32b2bbcb8b53cd3c4c';
+        const map = L.map('map').setView([49.9914, 36.2799], 13);
 
-        
-        L.tileLayer(
-            'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-            {
-                attribution: '&copy; OpenStreetMap'
-            }
-        ).addTo(map);
+        // 1. НОВІ КРАСИВІ ПЛИТКИ ВІД GEOAPIFY (Світла тема osm-bright)
+        L.tileLayer(`https://maps.geoapify.com/v1/tile/osm-bright/{z}/{x}/{y}.png?apiKey=${geoapifyKey}`, {
+            attribution: 'Powered by <a href="https://www.geoapify.com/" target="_blank">Geoapify</a> | <a href="https://openmaptiles.org/" target="_blank">© OpenMapTiles</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">© OpenStreetMap</a>',
+            maxZoom: 20
+        }).addTo(map);
 
-        
-        let marker = L.marker(
-            [50.4501, 30.5234],
-            {
-                draggable: true
-            }
-        ).addTo(map);
+        let marker = L.marker([50.4501, 30.5234], { draggable: true }).addTo(map);
 
-        
         function updateCoordinates(lat, lng) {
-
-            document.getElementById("lat").innerText = lat;
-            document.getElementById("lng").innerText = lng;
-
+            document.getElementById("lat").innerText = lat.toFixed(5);
+            document.getElementById("lng").innerText = lng.toFixed(5);
         }
 
         updateCoordinates(50.4501, 30.5234);
 
-        
         map.on('click', function (e) {
-
-            const lat = e.latlng.lat;
-            const lng = e.latlng.lng;
-
             marker.setLatLng(e.latlng);
-
-            updateCoordinates(lat, lng);
-
+            updateCoordinates(e.latlng.lat, e.latlng.lng);
         });
 
-        
         marker.on('dragend', function () {
-
             const pos = marker.getLatLng();
-
             updateCoordinates(pos.lat, pos.lng);
-
         });
 
-        
-        function saveCoordinates() {
-
+        // 2. НОВА ЛОГІКА ЗБЕРЕЖЕННЯ (Відправка прямо в Avalonia)
+        async function saveCoordinates() {
             const lat = document.getElementById("lat").innerText;
             const lng = document.getElementById("lng").innerText;
 
-            const token = localStorage.getItem("Token");
-            console.log("TOKEN FROM LOCALSTORAGE:", localStorage.getItem("token"));
+            // Запит на зворотне геокодування (Reverse Geocoding)
+            const geoUrl = `https://api.geoapify.com/v1/geocode/reverse?lat=${lat}&lon=${lng}&lang=uk&format=json&limit=5&apiKey=${geoapifyKey}`;
 
-            fetch("https://localhost:44333/api/map/save", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": "Bearer" + token   
-                },
-                body: JSON.stringify({
-                    latitude: parseFloat(lat),
-                    longitude: parseFloat(lng)
-                })
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error("Server error: " + response.status);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    console.log("Saved:", data);
-                    alert("Координати збережено!");
-                })
-                .catch(err => {
-                    console.error(err);
-                    alert(err.message);
-                });
+            try {
+                // Змінюємо текст кнопки, щоб юзер бачив, що йде загрузка
+                const btn = document.querySelector('.btn-save');
+                const oldText = btn.innerText;
+                btn.innerText = "Пошук адреси...";
+                btn.disabled = true;
+
+                const response = await fetch(geoUrl);
+                const data = await response.json();
+
+                // Наш "розумний" пошук адреси з номером будинку
+                let finalAddress = "Адреса не знайдена";
+                const exactAddress = data.results.find(r => r.street && r.housenumber);
+
+                if (exactAddress) {
+                    finalAddress = `${exactAddress.street}, ${exactAddress.housenumber}`;
+                } else if (data.results.length > 0) {
+                    finalAddress = data.results[0].formatted;
+                }
+
+                // МАГІЯ: Передача адреси назад у C# (Avalonia)
+                if (window.chrome && window.chrome.webview) {
+                    window.chrome.webview.postMessage(finalAddress);
+                } else {
+                    alert("Цей текст полетить в Avalonia:\n" + finalAddress);
+                }
+
+                // Повертаємо кнопку в нормальний стан
+                btn.innerText = oldText;
+                btn.disabled = false;
+
+            } catch (err) {
+                alert("Помилка з'єднання з картою: " + err.message);
+                document.querySelector('.btn-save').disabled = false;
+                document.querySelector('.btn-save').innerText = "Підтвердити адресу";
+            }
         }
-        console.log("HEADERS SENDING REQUEST");
     </script>
-
 </body>
-
 </html>

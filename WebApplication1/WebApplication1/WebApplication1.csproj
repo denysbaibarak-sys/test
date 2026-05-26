@@ -156,7 +156,6 @@
     <Compile Include="Controllers\ApplicationController.cs" />
     <Compile Include="Controllers\AuthController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\MapController.cs" />
     <Compile Include="Controllers\MediaController.cs" />
     <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\RestaurantController.cs" />
@@ -173,7 +172,6 @@
     <Compile Include="Services\AuthService.cs" />
     <Compile Include="Services\FileService.cs" />
     <Compile Include="Services\Logger.cs" />
-    <Compile Include="Services\MapService.cs" />
     <Compile Include="Services\OrderService.cs" />
     <Compile Include="Services\TaskQueueManager.cs" />
     <Compile Include="Services\Validator.cs" />
