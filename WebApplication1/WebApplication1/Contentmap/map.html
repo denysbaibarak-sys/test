@@ -72,9 +72,15 @@
     <script>
 
         const geoapifyKey = '5b30df56549e4a32b2bbcb8b53cd3c4c';
-        const map = L.map('map').setView([49.9914, 36.2799], 13);
+        const map = L.map('map', {
+            zoomControl: false
+        }).setView([50.4501, 30.5234], 13);
 
-        // 1. НОВІ КРАСИВІ ПЛИТКИ ВІД GEOAPIFY (Світла тема osm-bright)
+        L.control.zoom({
+            position: 'bottomright'
+        }).addTo(map);
+
+        // 1. ІНТЕГРАЦІЯ КАРТИ (Leaflet + Geoapify)
         L.tileLayer(`https://maps.geoapify.com/v1/tile/osm-bright/{z}/{x}/{y}.png?apiKey=${geoapifyKey}`, {
             attribution: 'Powered by <a href="https://www.geoapify.com/" target="_blank">Geoapify</a> | <a href="https://openmaptiles.org/" target="_blank">© OpenMapTiles</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">© OpenStreetMap</a>',
             maxZoom: 20
@@ -117,7 +123,7 @@
                 const response = await fetch(geoUrl);
                 const data = await response.json();
 
-                // Наш "розумний" пошук адреси з номером будинку
+                // розумний пошук адреси з номером будинку
                 let finalAddress = "Адреса не знайдена";
                 const exactAddress = data.results.find(r => r.street && r.housenumber);
 
@@ -127,7 +133,7 @@
                     finalAddress = data.results[0].formatted;
                 }
 
-                // МАГІЯ: Передача адреси назад у C# (Avalonia)
+                // Передача адреси назад у Avalonia
                 if (window.chrome && window.chrome.webview) {
                     window.chrome.webview.postMessage(finalAddress);
                 } else {

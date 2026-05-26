@@ -50,41 +50,38 @@ public class UserController : ApiController
     public IHttpActionResult UpdateProfile([FromBody] User updatedUser)
     {
         var token = Request.Headers.Authorization?.Parameter;
-
         logger.Log($"[ОТРИМАНО] Запит на оновлення профілю. Токен: {token}");
 
         var user = authService.GetUserByToken(token);
 
         if (user == null)
         {
-            logger.Log("[ПОМИЛКА] Оновлення профілю відхилено");
+            logger.Log("[ПОМИЛКА] Оновлення профілю відхилено. Невірний токен.");
             return Unauthorized();
         }
 
         updatedUser.Token = token;
 
-        // Кладемо оновлення у фонову чергу
-        TaskQueueManager.EnqueueTask(() =>
+        try
         {
-            try
+            bool isUpdated = authService.UpdateUserProfile(updatedUser);
+
+            if (isUpdated)
             {
-                // Блок виконується воркером у фоновому режимі
-                bool isUpdated = authService.UpdateUserProfile(updatedUser);
-
-                if (isUpdated)
-                    logger.Log($"[ОБРОБЛЕНО ВОРКЕРОМ] Профіль {updatedUser.Login} успішно оновлено в базі.");
-                else
-                    logger.Log($"[ПОМИЛКА ВОРКЕРА] Не вдалося оновити профіль {updatedUser.Login}. Логін або телефон вже використовується іншим користувачем!");
+                logger.Log($"[УСПІХ] Профіль {updatedUser.Login} успішно оновлено в базі.");
+                return Ok();
             }
-            catch (Exception ex)
+            else
             {
-                logger.Log($"[ПОМИЛКА ВОРКЕРА] Оновлення профілю {updatedUser.Login}: {ex.Message}");
+                logger.Log($"[ПОМИЛКА] Не вдалося оновити профіль {updatedUser.Login}. Можливо, конфлікт даних або помилка валідації.");
+                return BadRequest("Не вдалося оновити профіль. Перевірте правильність введених даних (формат логіну/телефону).");
             }
-        });
-
-        logger.Log($"[ВІДПРАВЛЕНО] Відповідь клієнту: Запит на оновлення профілю додано в чергу.");
-
-        return Ok();
+        }
+        catch (Exception ex)
+        {
+            logger.Log($"[ПОМИЛКА] Оновлення профілю {updatedUser.Login}: {ex.Message}");
+            return InternalServerError(ex);
+        }
     }
     [HttpGet]
     [Route("api/users/me")]
