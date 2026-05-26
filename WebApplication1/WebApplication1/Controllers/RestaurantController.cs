@@ -6,6 +6,7 @@ using System.Web.Http;
 
 public class RestaurantController : ApiController
 {
+    private static AuthService authService = new AuthService();
     private FileService fileService = new FileService();
     private Logger logger = new Logger();
     private Validator validator = new Validator();
@@ -62,6 +63,7 @@ public class RestaurantController : ApiController
 
         return restaurants;
     }
+
     [HttpPut]
     [Route("api/restaurants/update")]
     public IHttpActionResult UpdateRestaurant(Restaurant updatedRestaurant)
@@ -98,6 +100,43 @@ public class RestaurantController : ApiController
         catch (Exception ex)
         {
             logger.Log($"[ПОМИЛКА] Під час оновлення ресторану: {ex.Message}");
+            return InternalServerError(ex);
+        }
+    }
+
+    [HttpDelete]
+    [Route("api/restaurant/delete")]
+    public IHttpActionResult DeleteRestaurant()
+    {
+        try
+        {
+            var token = Request.Headers.Authorization?.Parameter;
+            var user = authService.GetUserByToken(token);
+
+            if (user == null || user.Role != "Owner")
+            {
+                logger.Log("[ПОМИЛКА] Спроба видалення закладу без прав доступу.");
+                return Unauthorized();
+            }
+
+            var restaurants = fileService.LoadRestaurants();
+            var restaurantToDelete = restaurants.FirstOrDefault(r => r.OwnerId == user.Id);
+
+            if (restaurantToDelete != null)
+            {
+                restaurants.Remove(restaurantToDelete);
+                fileService.SaveRestaurants(restaurants);
+
+                logger.Log($"[ВИДАЛЕНО] Ресторан '{restaurantToDelete.Name}' успішно видалено власником {user.Login}.");
+                return Ok();
+            }
+
+            logger.Log($"[ПОМИЛКА] Заклад для власника {user.Login} не знайдено.");
+            return BadRequest("Заклад не знайдено");
+        }
+        catch (Exception ex)
+        {
+            logger.Log($"[ПОМИЛКА СЕРВЕРА] Під час видалення ресторану: {ex.Message}");
             return InternalServerError(ex);
         }
     }
