@@ -35,10 +35,16 @@ public class ApplicationController : ApiController
     {
         try
         {
+            logger.Log("[ОТРИМАНО] Запит на створення заявки...");
+
             var token = Request.Headers.Authorization?.Parameter;
             var user = new AuthService().GetUserByToken(token);
 
-            if (user == null) return Unauthorized();
+            if (user == null)
+            {
+                logger.Log("[ПОМИЛКА] Користувач не знайдений або токен недійсний.");
+                return Unauthorized();
+            }
 
             if (string.IsNullOrWhiteSpace(app.FullName) || string.IsNullOrWhiteSpace(app.Phone) || string.IsNullOrWhiteSpace(app.Email))
             {
@@ -52,17 +58,25 @@ public class ApplicationController : ApiController
                 return BadRequest("Ваша попередня заявка вже знаходиться на розгляді.");
             }
 
+            if (string.IsNullOrEmpty(app.Id))
+            {
+                app.Id = Guid.NewGuid().ToString("N").Substring(0, 6).ToUpper();
+            }
+
             app.UserId = user.Id;
             app.Status = "Pending";
+            app.CreatedAt = DateTime.Now;
+
             apps.Add(app);
 
             SaveApplications(apps);
-            logger.Log($"[ЗАЯВКА] Користувач {user.Login} подав заявку на партнерство.");
+            logger.Log($"[ВІДПРАВЛЕНО] Користувач {user.Login} успішно подав заявку (ID: {app.Id}).");
 
             return Ok(new { Message = "Заявку успішно відправлено!" });
         }
         catch (Exception ex)
         {
+            logger.Log($"[КРИТИЧНА ПОМИЛКА] {ex.Message}");
             return InternalServerError(ex);
         }
     }
@@ -82,38 +96,64 @@ public class ApplicationController : ApiController
         return Ok(new { Status = lastApp.Status });
     }
 
-    // Для обробки через Postman: POST api/applications/review?id=ORD123&action=Approve (або Reject)
-    [HttpPost]
-    [Route("api/applications/review")]
-    public IHttpActionResult ReviewApplication(string id, string action)
+    [HttpGet]
+    [Route("api/applications/pending")]
+    public IHttpActionResult GetPendingApplications()
     {
-        var apps = LoadApplications();
-        var app = apps.FirstOrDefault(a => a.Id == id);
+        var token = Request.Headers.Authorization?.Parameter;
+        var currentUser = new AuthService().GetUserByToken(token);
 
-        if (app == null) return NotFound();
-        if (app.Status != "Pending") return BadRequest("Ця заявка вже була оброблена.");
-
-        string usersPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "App_Data", "users.json");
-
-        if (action.Equals("Approve", StringComparison.OrdinalIgnoreCase))
+        if (currentUser == null || currentUser.Role != "Admin")
         {
-            app.Status = "Approved";
-
-            new AuthService().UpdateUserRole(app.UserId, "Owner");
-
-            logger.Log($"[АДМІН] Заявку {id} СХВАЛЕНО. Користувач ID {app.UserId} тепер Owner.");
-        }
-        else if (action.Equals("Reject", StringComparison.OrdinalIgnoreCase))
-        {
-            app.Status = "Rejected";
-            logger.Log($"[АДМІН] Заявку {id} ВІДХИЛЕНО.");
-        }
-        else
-        {
-            return BadRequest("Невідома дія. Використовуйте Approve або Reject.");
+            return Unauthorized();
         }
 
-        SaveApplications(apps);
-        return Ok($"Заявку {id} успішно оновлено статус на: {app.Status}");
+        var allApplications = LoadApplications();
+
+        var pendingApps = allApplications.Where(a => a.Status == "Pending").ToList();
+
+        return Ok(pendingApps);
+    }
+
+    [HttpPost]
+    [Route("api/applications/update-status")]
+    public IHttpActionResult UpdateApplicationStatus([FromBody] ApplicationStatusUpdateRequest request)
+    {
+        var token = Request.Headers.Authorization?.Parameter;
+        var currentUser = new AuthService().GetUserByToken(token);
+
+        if (currentUser == null || currentUser.Role != "Admin")
+        {
+            return Unauthorized();
+        }
+
+        var allApplications = LoadApplications();
+        var application = allApplications.FirstOrDefault(a => a.Id == request.Id);
+
+        if (application == null)
+        {
+            return BadRequest("Заявку не знайдено.");
+        }
+
+        application.Status = request.Status;
+        SaveApplications(allApplications);
+
+        if (request.Status == "Approved")
+        {
+            new AuthService().UpdateUserRole(application.UserId, "Owner");
+            logger.Log($"[АДМІН] Заявку {application.Id} СХВАЛЕНО. Користувач ID {application.UserId} тепер Owner.");
+        }
+        else if (request.Status == "Rejected")
+        {
+            logger.Log($"[АДМІН] Заявку {application.Id} ВІДХИЛЕНО.");
+        }
+
+        return Ok();
+    }
+
+    public class ApplicationStatusUpdateRequest
+    {
+        public string Id { get; set; }
+        public string Status { get; set; }
     }
 }
