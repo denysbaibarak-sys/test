@@ -1,9 +1,11 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
 
 [DataContract]
 public class PartnerApplication
 {
+    [Key]
     [DataMember]
     public string Id { get; set; } = Guid.NewGuid().ToString("N").Substring(0, 6).ToUpper();
     [DataMember]

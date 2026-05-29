@@ -1,57 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Runtime.Serialization.Json;
 using System.Text.RegularExpressions;
-using System.Web.Hosting;
+using WebApplication1.Models;
 
 public class AuthService
 {
-    private string path = HostingEnvironment.MapPath("~/App_Data/users.json");
-    private static List<User> users;
-    private static readonly object _lock = new object();
-    public AuthService()
-    {
-        if (users == null)
-        {
-            lock (_lock)
-            {
-                if (users == null)
-                {
-                    users = LoadUsers();
-                }
-            }
-        }
-    }
-
-    private List<User> LoadUsers()
-    {
-        if (!File.Exists(path))
-            return new List<User>();
-
-        var serializer = new DataContractJsonSerializer(typeof(List<User>));
-        using (FileStream fs = new FileStream(path, FileMode.Open))
-        {
-            return (List<User>)serializer.ReadObject(fs);
-        }
-    }
-
     private string GenerateToken()
     {
         return Guid.NewGuid().ToString("N");
-    }
-
-    private void SaveUsers()
-    {
-        lock (_lock)
-        {
-            var serializer = new DataContractJsonSerializer(typeof(List<User>));
-            using (FileStream fs = new FileStream(path, FileMode.Create))
-            {
-                serializer.WriteObject(fs, users);
-            }
-        }
     }
 
     public void Register(User user)
@@ -67,44 +23,51 @@ public class AuthService
             throw new ArgumentException("Формат логіну невірний. Має починатися з 3 літер.");
         }
 
-        bool isDuplicate = users.Any(u =>
-            (!string.IsNullOrWhiteSpace(u.Login) && u.Login.Equals(user.Login, StringComparison.OrdinalIgnoreCase)) ||
-            (!string.IsNullOrWhiteSpace(u.Email) && u.Email.Equals(user.Email, StringComparison.OrdinalIgnoreCase))
-        );
-
-        if (isDuplicate)
-            throw new ArgumentException("Користувач з таким логіном або поштою вже існує!");
-
-        user.Role = "Customer";
-        lock (_lock)
+        using (var db = new AppDbContext())
         {
-            user.Id = users.Any() ? users.Max(u => u.Id) + 1 : 1;
-            users.Add(user);
-            SaveUsers();
+            bool isDuplicate = db.Users.Any(u =>
+                (!string.IsNullOrEmpty(u.Login) && u.Login.ToLower() == user.Login.ToLower()) ||
+                (!string.IsNullOrEmpty(u.Email) && u.Email.ToLower() == user.Email.ToLower())
+            );
+
+            if (isDuplicate)
+                throw new ArgumentException("Користувач з таким логіном або поштою вже існує!");
+
+            user.Role = "Customer";
+
+            db.Users.Add(user);
+            db.SaveChanges();
         }
     }
+
     public void UpdateUserRole(int userId, string newRole)
     {
-        var user = users.FirstOrDefault(u => u.Id == userId);
-
-        if (user != null)
+        using (var db = new AppDbContext())
         {
-            user.Role = newRole;
-            SaveUsers();
+            var user = db.Users.FirstOrDefault(u => u.Id == userId);
+
+            if (user != null)
+            {
+                user.Role = newRole;
+                db.SaveChanges(); 
+            }
         }
     }
+
     public User Authenticate(string login, string password)
     {
-        var user = users.FirstOrDefault(u => u.Login == login && u.Password == password);
-
-        if (user != null)
+        using (var db = new AppDbContext())
         {
-            user.Token = GenerateToken();
+            var user = db.Users.FirstOrDefault(u => u.Login == login && u.Password == password);
 
-            SaveUsers();
+            if (user != null)
+            {
+                user.Token = GenerateToken();
+                db.SaveChanges();
+            }
+
+            return user;
         }
-
-        return user; 
     }
 
     public User GetUserByToken(string token)
@@ -112,7 +75,10 @@ public class AuthService
         if (string.IsNullOrWhiteSpace(token))
             return null;
 
-        return users.FirstOrDefault(u => u.Token == token);
+        using (var db = new AppDbContext())
+        {
+            return db.Users.FirstOrDefault(u => u.Token == token);
+        }
     }
 
     public bool UpdateUserProfile(User updatedUser)
@@ -127,50 +93,48 @@ public class AuthService
         if (!string.IsNullOrWhiteSpace(updatedUser.Login))
         {
             if (updatedUser.Login.Length < 3 || updatedUser.Login.Length > 20)
-            {
                 return false;
-            }
 
             var loginRegex = new Regex(@"^[a-zA-Zа-яА-ЯіІїЇєЄґҐ]{3}[a-zA-Zа-яА-ЯіІїЇєЄґҐ0-9_\-]{0,17}$");
             if (!loginRegex.IsMatch(updatedUser.Login))
-            {
                 return false;
-            }
         }
 
-        var existingUser = users.FirstOrDefault(u => u.Token == updatedUser.Token);
-
-        if (existingUser != null)
+        using (var db = new AppDbContext())
         {
-            bool isDuplicate = users.Any(u =>
-                u.Id != existingUser.Id &&
-                (
-                    (!string.IsNullOrWhiteSpace(u.Login) && u.Login.Equals(updatedUser.Login, StringComparison.OrdinalIgnoreCase)) ||
-                    (!string.IsNullOrWhiteSpace(updatedUser.Phone) && !string.IsNullOrWhiteSpace(u.Phone) && u.Phone == updatedUser.Phone)
-                ));
+            var existingUser = db.Users.FirstOrDefault(u => u.Token == updatedUser.Token);
 
-            if (isDuplicate)
+            if (existingUser != null)
             {
-                return false;
+                bool isDuplicate = db.Users.Any(u =>
+                    u.Id != existingUser.Id &&
+                    (
+                        (!string.IsNullOrEmpty(u.Login) && u.Login.ToLower() == updatedUser.Login.ToLower()) ||
+                        (!string.IsNullOrEmpty(updatedUser.Phone) && !string.IsNullOrEmpty(u.Phone) && u.Phone == updatedUser.Phone)
+                    ));
+
+                if (isDuplicate)
+                {
+                    return false;
+                }
+
+                if (!string.IsNullOrWhiteSpace(updatedUser.Login))
+                    existingUser.Login = updatedUser.Login;
+
+                if (!string.IsNullOrWhiteSpace(updatedUser.Phone))
+                    existingUser.Phone = updatedUser.Phone;
+
+                if (!string.IsNullOrWhiteSpace(updatedUser.Password))
+                    existingUser.Password = updatedUser.Password;
+
+                if (!string.IsNullOrWhiteSpace(updatedUser.Address))
+                    existingUser.Address = updatedUser.Address;
+
+                db.SaveChanges();
+                return true;
             }
 
-            if (!string.IsNullOrWhiteSpace(updatedUser.Login))
-                existingUser.Login = updatedUser.Login;
-
-            if (!string.IsNullOrWhiteSpace(updatedUser.Phone))
-                existingUser.Phone = updatedUser.Phone;
-
-            if (!string.IsNullOrWhiteSpace(updatedUser.Password))
-                existingUser.Password = updatedUser.Password;
-
-            if (!string.IsNullOrWhiteSpace(updatedUser.Address))
-                existingUser.Address = updatedUser.Address;
-
-            SaveUsers();
-
-            return true;
+            return false;
         }
-
-        return false;
     }
 }

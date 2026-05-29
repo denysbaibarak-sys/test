@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Web.Http;
+using WebApplication1.Models;
 
 public class UserController : ApiController
 {
-    private static AuthService authService = new AuthService();
+    private AuthService authService = new AuthService();
     private Logger logger = new Logger();
 
     [HttpPost]

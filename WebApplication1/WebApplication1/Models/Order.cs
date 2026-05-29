@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
 
 [DataContract]
 public class Order
 {
+    [Key]
     [DataMember]
     public string OrderId { get; set; }
 

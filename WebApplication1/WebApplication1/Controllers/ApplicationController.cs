@@ -1,33 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Runtime.Serialization.Json;
 using System.Web.Http;
+using WebApplication1.Models;
 
 public class ApplicationController : ApiController
 {
-    private string appPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "App_Data", "applications.json");
     private Logger logger = new Logger();
-
-    private List<PartnerApplication> LoadApplications()
-    {
-        if (!File.Exists(appPath)) return new List<PartnerApplication>();
-        var serializer = new DataContractJsonSerializer(typeof(List<PartnerApplication>));
-        using (FileStream fs = new FileStream(appPath, FileMode.Open))
-        {
-            return (List<PartnerApplication>)serializer.ReadObject(fs);
-        }
-    }
-
-    private void SaveApplications(List<PartnerApplication> apps)
-    {
-        var serializer = new DataContractJsonSerializer(typeof(List<PartnerApplication>));
-        using (FileStream fs = new FileStream(appPath, FileMode.Create))
-        {
-            serializer.WriteObject(fs, apps);
-        }
-    }
 
     [HttpPost]
     [Route("api/applications/submit")]
@@ -51,25 +29,26 @@ public class ApplicationController : ApiController
                 return BadRequest("Заповніть всі обов'язкові поля!");
             }
 
-            var apps = LoadApplications();
-
-            if (apps.Any(a => a.UserId == user.Id && a.Status == "Pending"))
+            using (var db = new AppDbContext())
             {
-                return BadRequest("Ваша попередня заявка вже знаходиться на розгляді.");
+                if (db.PartnerApplications.Any(a => a.UserId == user.Id && a.Status == "Pending"))
+                {
+                    return BadRequest("Ваша попередня заявка вже знаходиться на розгляді.");
+                }
+
+                if (string.IsNullOrEmpty(app.Id))
+                {
+                    app.Id = Guid.NewGuid().ToString("N").Substring(0, 6).ToUpper();
+                }
+
+                app.UserId = user.Id;
+                app.Status = "Pending";
+                app.CreatedAt = DateTime.Now;
+
+                db.PartnerApplications.Add(app);
+                db.SaveChanges();
             }
 
-            if (string.IsNullOrEmpty(app.Id))
-            {
-                app.Id = Guid.NewGuid().ToString("N").Substring(0, 6).ToUpper();
-            }
-
-            app.UserId = user.Id;
-            app.Status = "Pending";
-            app.CreatedAt = DateTime.Now;
-
-            apps.Add(app);
-
-            SaveApplications(apps);
             logger.Log($"[ВІДПРАВЛЕНО] Користувач {user.Login} успішно подав заявку (ID: {app.Id}).");
 
             return Ok(new { Message = "Заявку успішно відправлено!" });
@@ -87,13 +66,20 @@ public class ApplicationController : ApiController
     {
         var token = Request.Headers.Authorization?.Parameter;
         var user = new AuthService().GetUserByToken(token);
+
         if (user == null) return Unauthorized();
 
-        var apps = LoadApplications();
-        var lastApp = apps.Where(a => a.UserId == user.Id).OrderByDescending(a => a.CreatedAt).FirstOrDefault();
+        using (var db = new AppDbContext())
+        {
+            var lastApp = db.PartnerApplications
+                            .Where(a => a.UserId == user.Id)
+                            .OrderByDescending(a => a.CreatedAt)
+                            .FirstOrDefault();
 
-        if (lastApp == null) return Ok(new { Status = "None" });
-        return Ok(new { Status = lastApp.Status });
+            if (lastApp == null) return Ok(new { Status = "None" });
+
+            return Ok(new { Status = lastApp.Status });
+        }
     }
 
     [HttpGet]
@@ -108,11 +94,11 @@ public class ApplicationController : ApiController
             return Unauthorized();
         }
 
-        var allApplications = LoadApplications();
-
-        var pendingApps = allApplications.Where(a => a.Status == "Pending").ToList();
-
-        return Ok(pendingApps);
+        using (var db = new AppDbContext())
+        {
+            var pendingApps = db.PartnerApplications.Where(a => a.Status == "Pending").ToList();
+            return Ok(pendingApps);
+        }
     }
 
     [HttpPost]
@@ -127,28 +113,30 @@ public class ApplicationController : ApiController
             return Unauthorized();
         }
 
-        var allApplications = LoadApplications();
-        var application = allApplications.FirstOrDefault(a => a.Id == request.Id);
-
-        if (application == null)
+        using (var db = new AppDbContext())
         {
-            return BadRequest("Заявку не знайдено.");
-        }
+            var application = db.PartnerApplications.FirstOrDefault(a => a.Id == request.Id);
 
-        application.Status = request.Status;
-        SaveApplications(allApplications);
+            if (application == null)
+            {
+                return BadRequest("Заявку не знайдено.");
+            }
 
-        if (request.Status == "Approved")
-        {
-            new AuthService().UpdateUserRole(application.UserId, "Owner");
-            logger.Log($"[АДМІН] Заявку {application.Id} СХВАЛЕНО. Користувач ID {application.UserId} тепер Owner.");
-        }
-        else if (request.Status == "Rejected")
-        {
-            logger.Log($"[АДМІН] Заявку {application.Id} ВІДХИЛЕНО.");
-        }
+            application.Status = request.Status;
+            db.SaveChanges();
 
-        return Ok();
+            if (request.Status == "Approved")
+            {
+                new AuthService().UpdateUserRole(application.UserId, "Owner");
+                logger.Log($"[АДМІН] Заявку {application.Id} СХВАЛЕНО. Користувач ID {application.UserId} тепер Owner.");
+            }
+            else if (request.Status == "Rejected")
+            {
+                logger.Log($"[АДМІН] Заявку {application.Id} ВІДХИЛЕНО.");
+            }
+
+            return Ok();
+        }
     }
 
     public class ApplicationStatusUpdateRequest

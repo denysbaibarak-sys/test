@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Runtime.Serialization;
 
 [DataContract]
 public class User
@@ -6,6 +7,7 @@ public class User
     [DataMember]
     public string Token { get; set; }
 
+    [Key]
     [DataMember]
     public int Id { get; set; }
     [DataMember]

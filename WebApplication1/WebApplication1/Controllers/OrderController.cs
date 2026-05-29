@@ -1,23 +1,24 @@
 ﻿using System;
 using System.Linq;
 using System.Web.Http;
+using WebApplication1.Models;
 
 public class OrderController : ApiController
 {
-    private static OrderService orderService = new OrderService();
-    private Logger logger = new Logger(); // Використовуємо існуючий логер проекту
+    private OrderService orderService = new OrderService();
+    private Logger logger = new Logger();
 
     [HttpPost]
     [Route("api/orders/create")]
-public IHttpActionResult CreateOrder(Order order)
-{
-    try
+    public IHttpActionResult CreateOrder(Order order)
     {
-        var token = Request.Headers.Authorization?.Parameter;
-            
-        logger.Log($"[ОТРИМАНО] Запит на створення замовлення. Токен: {token}");
-        
-        var user = new AuthService().GetUserByToken(token);
+        try
+        {
+            var token = Request.Headers.Authorization?.Parameter;
+
+            logger.Log($"[ОТРИМАНО] Запит на створення замовлення. Токен: {token}");
+
+            var user = new AuthService().GetUserByToken(token);
 
             if (user == null)
             {
@@ -39,13 +40,12 @@ public IHttpActionResult CreateOrder(Order order)
                 order.OrderId = "ORD-" + Guid.NewGuid().ToString("N").Substring(0, 6).ToUpper();
             }
 
-            // MESSAGE QUEUE
             TaskQueueManager.EnqueueTask(() =>
             {
                 try
                 {
-                    // Блок що виконується фоново воркером
-                    orderService.AddOrder(order);
+                    var backgroundOrderService = new OrderService();
+                    backgroundOrderService.AddOrder(order);
 
                     logger.Log($"[ОБРОБЛЕНО ВОРКЕРОМ] Замовлення {order.OrderId} успішно збережено в БД.");
                 }
@@ -55,10 +55,8 @@ public IHttpActionResult CreateOrder(Order order)
                 }
             });
 
-            // МИТТЄВА ВІДПОВІДЬ (Основа для Short Polling)
             logger.Log($"[ВІДПРАВЛЕНО] Відповідь клієнту: Замовлення {order.OrderId} додано в чергу.");
 
-            // Повертаємо клієнту об'єкт із згенерованим OrderId
             return Ok(order);
         }
         catch (ArgumentException ex)
@@ -91,6 +89,7 @@ public IHttpActionResult CreateOrder(Order order)
             return InternalServerError(ex);
         }
     }
+
     [HttpGet]
     [Route("api/orders/poll")]
     public IHttpActionResult PollOrders(string lastUpdate)
@@ -99,7 +98,6 @@ public IHttpActionResult CreateOrder(Order order)
         {
             DateTime parsedDate;
 
-            // Якщо клієнт нічого не передав - повертаємо всі
             if (string.IsNullOrEmpty(lastUpdate) || !DateTime.TryParse(lastUpdate, out parsedDate))
             {
                 var allOrders = orderService.GetAllOrders();
@@ -107,16 +105,13 @@ public IHttpActionResult CreateOrder(Order order)
                 return Ok(allOrders);
             }
 
-            // Беремо лише нові
             var newOrders = orderService.GetOrdersAfter(parsedDate);
 
-            // Якщо нових немає - повертаємо 204 NoContent
             if (newOrders == null || !newOrders.Any())
             {
                 return StatusCode(System.Net.HttpStatusCode.NoContent);
             }
 
-            // Якщо є оновлення - пишемо в лог і віддаємо клієнту
             logger.Log($"[POLLING] Знайдено {newOrders.Count} оновлених замовлень.");
             return Ok(newOrders);
         }
@@ -135,6 +130,7 @@ public IHttpActionResult CreateOrder(Order order)
         logger.Log($"[ТЕСТ] Статус замовлення {orderId} змінено на 'Доставлено'");
         return Ok($"Замовлення {orderId} оновлено!");
     }
+
     [HttpDelete]
     [Route("api/orders/clear")]
     public IHttpActionResult ClearOrders()

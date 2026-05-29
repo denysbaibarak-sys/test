@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Web.Http;
+using WebApplication1.Models;
 
 public class RestaurantController : ApiController
 {
-    private static AuthService authService = new AuthService();
-    private FileService fileService = new FileService();
+    private AuthService authService = new AuthService();
     private Logger logger = new Logger();
     private Validator validator = new Validator();
 
@@ -21,21 +22,22 @@ public class RestaurantController : ApiController
 
             validator.ValidateRestaurant(restaurant);
 
-            var restaurants = fileService.LoadRestaurants();
-
-            if (restaurants.Any())
+            using (var db = new AppDbContext())
             {
-                restaurant.Id = restaurants.Max(r => r.Id) + 1;
-            }
-            else
-            {
-                restaurant.Id = 1;
+                if (restaurant.Menu != null)
+                {
+                    foreach (var food in restaurant.Menu)
+                    {
+                        if (string.IsNullOrEmpty(food.Id))
+                            food.Id = Guid.NewGuid().ToString("N").Substring(0, 8);
+                    }
+                }
+
+                db.Restaurants.Add(restaurant);
+                db.SaveChanges();
             }
 
-            restaurants.Add(restaurant);
-            fileService.SaveRestaurants(restaurants);
-
-            logger.Log($"[ВІДПРАВЛЕНО] Ресторан '{restaurant.Name}' успішно додано до бази під Id {restaurant.Id}.");
+            logger.Log($"[ВІДПРАВЛЕНО] Ресторан '{restaurant.Name}' успішно додано до бази.");
 
             return StatusCode(HttpStatusCode.Created);
         }
@@ -57,11 +59,14 @@ public class RestaurantController : ApiController
     {
         logger.Log("[ОТРИМАНО] Запит на отримання списку всіх ресторанів.");
 
-        var restaurants = fileService.LoadRestaurants();
+        using (var db = new AppDbContext())
+        {
+            var restaurants = db.Restaurants.Include(r => r.Menu).ToList();
 
-        logger.Log($"[ВІДПРАВЛЕНО] Віддано клієнту ресторанів: {restaurants.Count}");
+            logger.Log($"[ВІДПРАВЛЕНО] Віддано клієнту ресторанів: {restaurants.Count}");
 
-        return restaurants;
+            return restaurants;
+        }
     }
 
     [HttpPut]
@@ -70,32 +75,46 @@ public class RestaurantController : ApiController
     {
         try
         {
-            var restaurants = fileService.LoadRestaurants();
-
-            var existingRest = restaurants.FirstOrDefault(r => r.Id == updatedRestaurant.Id);
-
-            if (existingRest == null)
+            using (var db = new AppDbContext())
             {
-                return NotFound();
+                var existingRest = db.Restaurants
+                                     .Include(r => r.Menu)
+                                     .FirstOrDefault(r => r.Id == updatedRestaurant.Id);
+
+                if (existingRest == null)
+                {
+                    return NotFound();
+                }
+
+                if (existingRest.OwnerId != updatedRestaurant.OwnerId)
+                {
+                    return Unauthorized();
+                }
+
+                existingRest.Name = updatedRestaurant.Name;
+                existingRest.Category = updatedRestaurant.Category;
+                existingRest.DeliveryTime = updatedRestaurant.DeliveryTime;
+                existingRest.Description = updatedRestaurant.Description;
+                existingRest.ImagePath = updatedRestaurant.ImagePath;
+                existingRest.Address = updatedRestaurant.Address;
+
+                existingRest.Menu.Clear();
+                if (updatedRestaurant.Menu != null)
+                {
+                    foreach (var food in updatedRestaurant.Menu)
+                    {
+                        if (string.IsNullOrEmpty(food.Id))
+                            food.Id = Guid.NewGuid().ToString("N").Substring(0, 8);
+
+                        existingRest.Menu.Add(food);
+                    }
+                }
+
+                db.SaveChanges();
+
+                logger.Log($"[ОНОВЛЕНО] Ресторан '{existingRest.Name}' успішно відредаговано власником.");
+                return Ok();
             }
-
-            if (existingRest.OwnerId != updatedRestaurant.OwnerId)
-            {
-                return Unauthorized();
-            }
-
-            existingRest.Name = updatedRestaurant.Name;
-            existingRest.Category = updatedRestaurant.Category;
-            existingRest.DeliveryTime = updatedRestaurant.DeliveryTime;
-            existingRest.Description = updatedRestaurant.Description;
-            existingRest.ImagePath = updatedRestaurant.ImagePath;
-            existingRest.Address = updatedRestaurant.Address;
-            existingRest.Menu = updatedRestaurant.Menu;
-
-            fileService.SaveRestaurants(restaurants);
-
-            logger.Log($"[ОНОВЛЕНО] Ресторан '{existingRest.Name}' успішно відредаговано власником.");
-            return Ok();
         }
         catch (Exception ex)
         {
@@ -119,20 +138,26 @@ public class RestaurantController : ApiController
                 return Unauthorized();
             }
 
-            var restaurants = fileService.LoadRestaurants();
-            var restaurantToDelete = restaurants.FirstOrDefault(r => r.OwnerId == user.Id);
-
-            if (restaurantToDelete != null)
+            using (var db = new AppDbContext())
             {
-                restaurants.Remove(restaurantToDelete);
-                fileService.SaveRestaurants(restaurants);
+                var restaurantToDelete = db.Restaurants
+                                           .Include(r => r.Menu)
+                                           .FirstOrDefault(r => r.OwnerId == user.Id);
 
-                logger.Log($"[ВИДАЛЕНО] Ресторан '{restaurantToDelete.Name}' успішно видалено власником {user.Login}.");
-                return Ok();
+                if (restaurantToDelete != null)
+                {
+                    restaurantToDelete.Menu.Clear();
+
+                    db.Restaurants.Remove(restaurantToDelete);
+                    db.SaveChanges();
+
+                    logger.Log($"[ВИДАЛЕНО] Ресторан '{restaurantToDelete.Name}' успішно видалено власником {user.Login}.");
+                    return Ok();
+                }
+
+                logger.Log($"[ПОМИЛКА] Заклад для власника {user.Login} не знайдено.");
+                return BadRequest("Заклад не знайдено");
             }
-
-            logger.Log($"[ПОМИЛКА] Заклад для власника {user.Login} не знайдено.");
-            return BadRequest("Заклад не знайдено");
         }
         catch (Exception ex)
         {

@@ -3,6 +3,7 @@ using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Web.Hosting; 
 using System.Web.Http;
 
 public class MediaController : ApiController
@@ -20,7 +21,7 @@ public class MediaController : ApiController
 
         try
         {
-            string root = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Images");
+            string root = HostingEnvironment.MapPath("~/Images");
 
             if (!Directory.Exists(root))
             {
@@ -29,6 +30,11 @@ public class MediaController : ApiController
 
             var provider = new MultipartFormDataStreamProvider(root);
             await Request.Content.ReadAsMultipartAsync(provider);
+
+            if (provider.FileData.Count == 0)
+            {
+                return BadRequest("Файл не знайдено у запиті.");
+            }
 
             var fileData = provider.FileData[0];
             string originalFileName = fileData.Headers.ContentDisposition.FileName.Trim('"');
