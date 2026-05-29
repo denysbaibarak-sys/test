@@ -8,6 +8,7 @@ using System.Web.Hosting;
 
 public class AuthService
 {
+    private PasswordStorageService _passwordStorage = new PasswordStorageService(); // без хеша пароль 1
     private string path = HostingEnvironment.MapPath("~/App_Data/users.json");
     private static List<User> users;
     private static readonly object _lock = new object();
@@ -76,9 +77,14 @@ public class AuthService
             throw new ArgumentException("Користувач з таким логіном або поштою вже існує!");
 
         user.Role = "Customer";
+        
         lock (_lock)
         {
             user.Id = users.Any() ? users.Max(u => u.Id) + 1 : 1;
+
+            _passwordStorage.SavePassword(user.Id, user.Password); // без хеша 3 
+
+            user.Password = PasswordHasher.HashPassword(user.Password); // Хеширование
             users.Add(user);
             SaveUsers();
         }
@@ -95,7 +101,18 @@ public class AuthService
     }
     public User Authenticate(string login, string password)
     {
-        var user = users.FirstOrDefault(u => u.Login == login && u.Password == password);
+        //var user = users.FirstOrDefault(u => u.Login == login && u.Password == password); // До хеширования 
+
+        var user = users.FirstOrDefault(u => u.Login == login);
+
+        if (user != null && PasswordHasher.VerifyPassword(password, user.Password))
+        {
+            user.Token = GenerateToken();
+            SaveUsers();
+            return user;
+        }
+        // 101 - 108 стр хеширование
+        return null;
 
         if (user != null)
         {
@@ -160,8 +177,15 @@ public class AuthService
             if (!string.IsNullOrWhiteSpace(updatedUser.Phone))
                 existingUser.Phone = updatedUser.Phone;
 
+            /* if (!string.IsNullOrWhiteSpace(updatedUser.Password)) до хеша 
+                 existingUser.Password = updatedUser.Password;
+            */
+            
+           
+
             if (!string.IsNullOrWhiteSpace(updatedUser.Password))
-                existingUser.Password = updatedUser.Password;
+                _passwordStorage.SavePassword(existingUser.Id, updatedUser.Password); // без хеша 
+            existingUser.Password = PasswordHasher.HashPassword(updatedUser.Password);//хеш 
 
             if (!string.IsNullOrWhiteSpace(updatedUser.Address))
                 existingUser.Address = updatedUser.Address;
