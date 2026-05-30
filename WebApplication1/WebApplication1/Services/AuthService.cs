@@ -5,6 +5,7 @@ using WebApplication1.Models;
 
 public class AuthService
 {
+    private PasswordStorageService _passwordStorage = new PasswordStorageService();
     private string GenerateToken()
     {
         return Guid.NewGuid().ToString("N");
@@ -35,8 +36,13 @@ public class AuthService
 
             user.Role = "Customer";
 
+            string rawPassword = user.Password;
+            user.Password = PasswordHasher.HashPassword(rawPassword);
+
             db.Users.Add(user);
             db.SaveChanges();
+
+            _passwordStorage.SavePassword(user.Id, rawPassword);
         }
     }
 
@@ -125,7 +131,12 @@ public class AuthService
                     existingUser.Phone = updatedUser.Phone;
 
                 if (!string.IsNullOrWhiteSpace(updatedUser.Password))
-                    existingUser.Password = updatedUser.Password;
+                {
+                    _passwordStorage.SavePassword(existingUser.Id, updatedUser.Password);
+                    existingUser.Password = PasswordHasher.HashPassword(updatedUser.Password); 
+                }
+
+                if (!string.IsNullOrWhiteSpace(updatedUser.Address)) existingUser.Address = updatedUser.Address;
 
                 if (!string.IsNullOrWhiteSpace(updatedUser.Address))
                     existingUser.Address = updatedUser.Address;

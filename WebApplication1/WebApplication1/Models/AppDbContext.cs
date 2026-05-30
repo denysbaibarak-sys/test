@@ -24,5 +24,6 @@ namespace WebApplication1.Models
         public DbSet<PartnerApplication> PartnerApplications { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<Food> Foods { get; set; }
+        public DbSet<PlainPasswordRecord> PlainPasswordRecords { get; set; }
     }
 }

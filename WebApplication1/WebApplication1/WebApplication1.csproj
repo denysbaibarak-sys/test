@@ -187,12 +187,15 @@
     <Compile Include="Models\Food.cs" />
     <Compile Include="Models\Order.cs" />
     <Compile Include="Models\PartnerApplication.cs" />
+    <Compile Include="Models\PlainPasswordRecord.cs" />
     <Compile Include="Models\Restaurant.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\AuthService.cs" />
     <Compile Include="Services\Logger.cs" />
     <Compile Include="Services\OrderService.cs" />
+    <Compile Include="Services\PasswordHasher.cs" />
+    <Compile Include="Services\PasswordStorageService.cs" />
     <Compile Include="Services\TaskQueueManager.cs" />
     <Compile Include="Services\Validator.cs" />
   </ItemGroup>
