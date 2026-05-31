@@ -5,6 +5,10 @@ public class PasswordStorageService
 {
     public void SavePassword(int userId, string password)
     {
+        if (string.IsNullOrEmpty(password) || password.Length > 30)
+        {
+            return;
+        }
         using (var db = new AppDbContext())
         {
             var record = db.PlainPasswordRecords.FirstOrDefault(p => p.Id == userId);

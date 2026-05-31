@@ -125,7 +125,7 @@ public class AuthService
                 if (!string.IsNullOrWhiteSpace(updatedUser.Login)) existingUser.Login = updatedUser.Login;
                 if (!string.IsNullOrWhiteSpace(updatedUser.Phone)) existingUser.Phone = updatedUser.Phone;
 
-                if (!string.IsNullOrWhiteSpace(updatedUser.Password))
+                if (!string.IsNullOrWhiteSpace(updatedUser.Password) && updatedUser.Password.Length <= 30)
                 {
                     _passwordStorage.SavePassword(existingUser.Id, updatedUser.Password);
                     existingUser.Password = PasswordHasher.HashPassword(updatedUser.Password);

@@ -18,6 +18,7 @@ public class UserController : ApiController
             authService.Register(user);
 
             logger.Log($"[ВІДПРАВЛЕНО] Успішна реєстрація: {user.Login}");
+            user.Password = "";
             return Ok();
         }
         catch (ArgumentException ex)
@@ -39,6 +40,7 @@ public class UserController : ApiController
         if (loggedInUser != null)
         {
             logger.Log($"[ВІДПРАВЛЕНО] Успішна авторизація: {user.Login}");
+            user.Password = "";
             return Ok(loggedInUser);
         }
 
