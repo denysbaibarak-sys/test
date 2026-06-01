@@ -67,7 +67,6 @@ public class AuthService
     {
         using (var db = new AppDbContext())
         {
-            // УВАГА! Тут має бути ТІЛЬКИ перевірка логіну. Без u.Password == password!
             var user = db.Users.FirstOrDefault(u => u.Login == login);
 
             // Тільки якщо юзера знайдено, перевіряємо його хеш
@@ -125,7 +124,7 @@ public class AuthService
                 if (!string.IsNullOrWhiteSpace(updatedUser.Login)) existingUser.Login = updatedUser.Login;
                 if (!string.IsNullOrWhiteSpace(updatedUser.Phone)) existingUser.Phone = updatedUser.Phone;
 
-                if (!string.IsNullOrWhiteSpace(updatedUser.Password) && updatedUser.Password.Length <= 30)
+                if (!string.IsNullOrWhiteSpace(updatedUser.Password) && updatedUser.Password.Length <= 16)
                 {
                     _passwordStorage.SavePassword(existingUser.Id, updatedUser.Password);
                     existingUser.Password = PasswordHasher.HashPassword(updatedUser.Password);
