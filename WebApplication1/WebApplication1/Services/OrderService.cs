@@ -61,7 +61,7 @@ public class OrderService
         {
             return db.Orders
                      .Include(o => o.OrderedItems)
-                     .Where(o => o.UpdatedAt > lastUpdate)
+                     .Where(o => o.UserId == userId && o.UpdatedAt > lastUpdate)
                      .ToList();
         }
     }
