@@ -47,15 +47,15 @@ public class OrderService
         }
     }
 
-    public List<Order> GetAllOrders()
+    public List<Order> GetAllOrders(int userId)
     {
         using (var db = new AppDbContext())
         {
-            return db.Orders.Include(o => o.OrderedItems).ToList();
+            return db.Orders.Include(o => o.OrderedItems).Where(o => o.UserId == userId).ToList();
         }
     }
 
-    public List<Order> GetOrdersAfter(DateTime lastUpdate)
+    public List<Order> GetOrdersAfter(int userId, DateTime lastUpdate)
     {
         using (var db = new AppDbContext())
         {

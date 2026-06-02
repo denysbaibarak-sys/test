@@ -73,11 +73,19 @@ public class OrderController : ApiController
 
     [HttpGet]
     [Route("api/orders")]
-    public IHttpActionResult GetOrders()
+    public IHttpActionResult GetOrders(int userId)
     {
         try
         {
-            var allOrders = orderService.GetAllOrders();
+            var token = Request.Headers.Authorization?.Parameter;
+            var user = new AuthService().GetUserByToken(token);
+
+            if (user == null)
+            {
+                logger.Log("[ПОМИЛКА] Неавторизований доступ до GetOrders.");
+                return Unauthorized();
+            }
+            var allOrders = orderService.GetAllOrders(userId);
 
             logger.Log("GetOrders called. Total orders: " + allOrders.Count);
 
@@ -92,20 +100,29 @@ public class OrderController : ApiController
 
     [HttpGet]
     [Route("api/orders/poll")]
-    public IHttpActionResult PollOrders(string lastUpdate)
+    public IHttpActionResult PollOrders(int userId, string lastUpdate)
     {
         try
         {
+            var token = Request.Headers.Authorization?.Parameter;
+            var user = new AuthService().GetUserByToken(token);
+
+            if (user == null)
+            {
+                logger.Log("[ПОМИЛКА] Неавторизований доступ до PollOrders.");
+                return Unauthorized();
+            }
+
             DateTime parsedDate;
 
             if (string.IsNullOrEmpty(lastUpdate) || !DateTime.TryParse(lastUpdate, out parsedDate))
             {
-                var allOrders = orderService.GetAllOrders();
+                var allOrders = orderService.GetAllOrders(userId);
                 logger.Log("[POLLING] Немає дати, повертаємо всі замовлення.");
                 return Ok(allOrders);
             }
 
-            var newOrders = orderService.GetOrdersAfter(parsedDate);
+            var newOrders = orderService.GetOrdersAfter(userId, parsedDate);
 
             if (newOrders == null || !newOrders.Any())
             {
