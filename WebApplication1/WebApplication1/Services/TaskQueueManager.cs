@@ -36,7 +36,6 @@ public static class TaskQueueManager
                 }
                 else
                 {
-                    // Якщо черга порожня, воркер чекає 100 мілісекунд
                     Thread.Sleep(100);
                 }
             }

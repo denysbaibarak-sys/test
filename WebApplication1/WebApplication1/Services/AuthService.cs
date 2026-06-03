@@ -7,7 +7,6 @@ public class AuthService
 {
     private PasswordStorageService _passwordStorage = new PasswordStorageService();
 
-    // Додаємо "світлофор" тільки для реєстрації, щоб уникнути подвійних кліків
     private static readonly object _regLock = new object();
 
     private string GenerateToken()
@@ -24,7 +23,6 @@ public class AuthService
         if (!loginRegex.IsMatch(user.Login))
             throw new ArgumentException("Формат логіну невірний. Має починатися з 3 літер.");
 
-        // Блокуємо двері: одночасно може реєструватися лише один потік
         lock (_regLock)
         {
             using (var db = new AppDbContext())
@@ -69,7 +67,6 @@ public class AuthService
         {
             var user = db.Users.FirstOrDefault(u => u.Login == login);
 
-            // Тільки якщо юзера знайдено, перевіряємо його хеш
             if (user != null && PasswordHasher.VerifyPassword(password, user.Password))
             {
                 user.Token = GenerateToken();

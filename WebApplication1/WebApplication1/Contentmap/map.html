@@ -80,7 +80,7 @@
             position: 'bottomright'
         }).addTo(map);
 
-        // 1. ІНТЕГРАЦІЯ КАРТИ (Leaflet + Geoapify)
+        // ІНТЕГРАЦІЯ КАРТИ (Leaflet + Geoapify)
         L.tileLayer(`https://maps.geoapify.com/v1/tile/osm-bright/{z}/{x}/{y}.png?apiKey=${geoapifyKey}`, {
             attribution: 'Powered by <a href="https://www.geoapify.com/" target="_blank">Geoapify</a> | <a href="https://openmaptiles.org/" target="_blank">© OpenMapTiles</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">© OpenStreetMap</a>',
             maxZoom: 20
@@ -105,16 +105,14 @@
             updateCoordinates(pos.lat, pos.lng);
         });
 
-        // 2. НОВА ЛОГІКА ЗБЕРЕЖЕННЯ (Відправка прямо в Avalonia)
         async function saveCoordinates() {
             const lat = document.getElementById("lat").innerText;
             const lng = document.getElementById("lng").innerText;
 
-            // Запит на зворотне геокодування (Reverse Geocoding)
+            // Запит на зворотне геокодування
             const geoUrl = `https://api.geoapify.com/v1/geocode/reverse?lat=${lat}&lon=${lng}&lang=uk&format=json&limit=5&apiKey=${geoapifyKey}`;
 
             try {
-                // Змінюємо текст кнопки, щоб юзер бачив, що йде загрузка
                 const btn = document.querySelector('.btn-save');
                 const oldText = btn.innerText;
                 btn.innerText = "Пошук адреси...";
@@ -123,7 +121,7 @@
                 const response = await fetch(geoUrl);
                 const data = await response.json();
 
-                // розумний пошук адреси з номером будинку
+                // пошук адреси з номером будинку
                 let finalAddress = "Адреса не знайдена";
                 const exactAddress = data.results.find(r => r.street && r.housenumber);
 
@@ -140,7 +138,6 @@
                     alert("Цей текст полетить в Avalonia:\n" + finalAddress);
                 }
 
-                // Повертаємо кнопку в нормальний стан
                 btn.innerText = oldText;
                 btn.disabled = false;
 
